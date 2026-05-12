@@ -4,6 +4,7 @@ import { redisClient } from "../index.js"
 import { publishToQueue } from "../config/rabitmq.js";
 import { User } from "../model/User.js";
 import { generateToken } from "../config/generateToken.js";
+import type { AuthenticatedRequest } from "../middleware/isAuth.js";
 
 // OTP Generation 
 export const loginUser = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -99,3 +100,12 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
   }
 
 });
+
+
+
+export const myProfile = TryCatch(async(req:AuthenticatedRequest, res:Response)=>
+{
+  const user = req.user;
+
+  res.json(user);
+})
