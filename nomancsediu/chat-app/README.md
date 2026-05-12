@@ -4,4 +4,8 @@
 
 **Author:** Abdullah Al Noman
 
+## System Architecture
+
+![System Architecture](readme-photos/system-architecture.png)
+
 </div>
