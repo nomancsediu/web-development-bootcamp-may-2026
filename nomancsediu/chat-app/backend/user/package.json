@@ -16,11 +16,13 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.2"
+    "mongoose": "^9.6.2",
+    "redis": "^5.12.1"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.6",
+    "@types/redis": "^4.0.11",
     "concurrently": "^9.2.1",
     "nodemon": "^3.1.14"
   }
