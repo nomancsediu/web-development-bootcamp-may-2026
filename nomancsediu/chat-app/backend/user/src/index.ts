@@ -1,8 +1,14 @@
-import express from 'express'
+import express from 'express';
+import dotenv  from  'dotenv';
+import connectDb from './config/db.js';
 
-const app = express()
+dotenv.config();
 
-const port = 5000
+connectDb();   
+
+const app = express();
+
+const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);
