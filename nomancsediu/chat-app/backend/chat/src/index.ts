@@ -7,8 +7,8 @@ dotenv.config();
 
 connectDb();
 const app = express();
+app.use(express.json());
 app.use('/api/v1', chatRoutes);
-
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
