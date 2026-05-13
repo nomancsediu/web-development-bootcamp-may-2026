@@ -5,6 +5,7 @@ import { publishToQueue } from "../config/rabitmq.js";
 import { User } from "../model/User.js";
 import { generateToken } from "../config/generateToken.js";
 import type { AuthenticatedRequest } from "../middleware/isAuth.js";
+import token from "jsonwebtoken";
 
 // OTP Generation 
 export const loginUser = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -108,4 +109,43 @@ export const myProfile = TryCatch(async(req:AuthenticatedRequest, res:Response)=
   const user = req.user;
 
   res.json(user);
-})
+});
+
+export const getAllUsers = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
+
+    const users = await User.find();
+
+    res.json(users);
+});
+
+export const getAUser = TryCatch(async(req: Request, res: Response) => {
+    const user = await User.findById(req.params.id);
+
+    res.json({ user });
+});
+
+export const updateName = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
+  const user = await User.findById(req.user?._id);
+
+  if(!user)
+  {
+    res.status(404).json({
+      message:"User not found",
+    });
+    return;
+  }
+  else
+  {
+    user.name = req.body.name;
+    await user.save();
+  }
+
+  const tokwn = generateToken(user);
+
+  res.json({
+    message:"Name updated successfully",
+    token,
+    user,
+  });
+
+});
