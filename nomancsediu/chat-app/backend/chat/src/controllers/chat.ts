@@ -62,7 +62,7 @@ export const getAllChats = TryCatch(
 
         const chatWithUserData = await Promise.all(
             chats.map(async (chat) => {
-                const otherUserId = chat.users.find(id=>id!==userId);
+                const otherUserId = chat.users.find(id=>id.toString()!==userId?.toString());
 
                 const unseenCount = await Message.countDocuments({
                     chatId: chat._id,
@@ -76,10 +76,10 @@ export const getAllChats = TryCatch(
                     );
 
                     return {
-                        user: data,
+                        user: data.user,
                         chat: {
                             ...chat.toObject(),
-                            latestMessage: chat.latestMessage || null,
+                            latestMessage: chat.latestMessage?.text ? chat.latestMessage : null,
                             unseenCount,
                         },
 
@@ -91,7 +91,7 @@ export const getAllChats = TryCatch(
                         user: {_id: otherUserId, name: "Unknown User"},
                         chat: {
                             ...chat.toObject(),
-                            latestMessage: chat.latestMessage || null,
+                            latestMessage: chat.latestMessage?.text ? chat.latestMessage : null,
                             unseenCount,
                         },
                     };
@@ -291,7 +291,7 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
 
     res.status(200).json({  
         messages,
-        user: data,
+        user: data.user,
     });
 
 

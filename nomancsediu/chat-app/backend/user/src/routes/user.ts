@@ -8,7 +8,7 @@ router.post("/login", loginUser);
 router.post("/verify", verifyUser);
 router.get("/me", isAuth, myProfile);
 router.get("/user/all", isAuth,getAllUsers);
-router.get("/user/:id", isAuth, getAUser);
+router.get("/user/:id", getAUser);
 router.put("/user/update/:id", isAuth, updateName);
 
 
