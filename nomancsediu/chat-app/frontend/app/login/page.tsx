@@ -25,6 +25,7 @@ const LoginPage = () => {
             const {data} = await axios.post(`${user_service}/api/v1/login`, {email});
 
             toast.success(data.message);
+            sessionStorage.setItem('otpRequested', 'true');
             router.push(`/verify?email=${email}`);
             
         } catch (error: any) {
@@ -40,9 +41,21 @@ const LoginPage = () => {
       if(isAuth) router.push('/chat')
 
 
-    return  <div className='min-h-screen bg-slate-950 flex flex-col md:flex-row'>
-        {/* Left Side - Illustration */}
-        <div className='hidden md:flex md:w-1/2 relative'>
+    return  <div className='h-screen bg-slate-950 flex flex-col lg:flex-row overflow-hidden'>
+        {/* Mobile/Tablet - top illustration */}
+        <div className='lg:hidden relative w-full h-[45vh] sm:h-[50vh] flex-shrink-0'>
+            <Image src='/images/logo.png' alt='Alapon' fill className='object-cover object-center' priority />
+            <div className='absolute inset-0 bg-black/40' />
+            <div className='absolute top-3 left-3 flex items-center gap-1.5'>
+                <div className='w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center'>
+                    <MessageCircle size={14} className='text-white'/>
+                </div>
+                <span className='text-white font-extrabold text-base tracking-wide'>Alapon</span>
+            </div>
+        </div>
+
+        {/* Left Side - Illustration (desktop only) */}
+        <div className='hidden lg:flex lg:w-1/2 relative'>
             <Image
                 src='/images/logo.png'
                 alt='Alapon Logo'
@@ -60,61 +73,48 @@ const LoginPage = () => {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className='w-full md:w-1/2 min-h-screen flex flex-col justify-center px-8 sm:px-12 lg:px-20'>
-            <div className='max-w-md w-full mx-auto bg-slate-900 rounded-2xl shadow-2xl shadow-black/60 p-10'>
+        <div className='w-full lg:w-1/2 flex-1 flex flex-col items-center justify-start pt-8 lg:justify-center px-5 sm:px-12 lg:px-20 bg-slate-950'>
+            <div className='max-w-md w-full mx-auto bg-slate-900 rounded-2xl shadow-2xl shadow-black/60 p-6 sm:p-10'>
 
-                <div className='mb-10'>
-                    <h1 className='text-4xl font-bold text-white mb-3'>
+                <div className='mb-7'>
+                    <h1 className='text-2xl sm:text-4xl font-bold text-white mb-2'>
                         Welcome Back
                     </h1>
-                    <p className='text-gray-400 text-lg'>
+                    <p className='text-gray-400 text-sm sm:text-lg'>
                         Enter your email to continue your journey
                     </p>
                 </div>
 
-                <form className='space-y-6' onSubmit={handleSubmit}>
+                <form className='space-y-5' onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="email" className='block text-sm font-medium text-gray-300 mb-2'>
                             Email Address
                         </label>
                         <div className='relative'>
-                            <Mail size={20} className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500' />
-                            <input type="email" id='email' className='w-full pl-12 pr-4
-                            py-4 bg-slate-800 border border-slate-700 rounded-lg
-                            text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 
-                            focus:ring-blue-500 transition-colors' placeholder='Enter your email address' 
+                            <Mail size={18} className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500' />
+                            <input type="email" id='email' className='w-full pl-11 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors'
+                            placeholder='Enter your email address'
                             value={email} onChange={(e) => setEmail(e.target.value)}
                             required />
                         </div>
                     </div>
-                    <button type='submit' className='w-full bg-blue-600
-                    text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50
-                    disabled:cursor-not-allowed transition-colors' 
-                    disabled={loading}
-                    >
-                        {
-                            loading? 
-                            (
+                    <button type='submit' className='w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+                    disabled={loading}>
+                        {loading ? (
                             <div className='flex items-center justify-center gap-2'>
-                                <Loader2 className='w-5 h-5' />
-                                Sending OTP to your mail...
-
+                                <Loader2 className='w-4 h-4 animate-spin' />
+                                <span className='text-sm'>Sending OTP...</span>
                             </div>
-                        )
-                        :
-                        (<div className='flex items-center justify-center gap-2'>
-                            <span>Send Verification Code</span>
-                            <ArrowRight className='w-5 h-5'/>
-                        </div>)
-                        }
-
+                        ) : (
+                            <div className='flex items-center justify-center gap-2'>
+                                <span>Send Verification Code</span>
+                                <ArrowRight className='w-4 h-4'/>
+                            </div>
+                        )}
                     </button>
                 </form>
-
-
             </div>
         </div>
-
     </div>
 }
 export default LoginPage;
