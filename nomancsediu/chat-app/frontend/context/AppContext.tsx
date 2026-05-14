@@ -8,13 +8,15 @@ import toast from "react-hot-toast";
 
 
 
-export const user_service = "http://localhost:5000";
-export const chat_service = "http://localhost:5002";
+export const user_service = process.env.NEXT_PUBLIC_USER_SERVICE || "http://localhost:5000";
+export const chat_service = process.env.NEXT_PUBLIC_CHAT_SERVICE || "http://localhost:5002";
 
 export interface User{
     _id:string;
     name:string;
     email:string;
+    avatar?: { url: string; publicId: string };
+    isInvisible?: boolean;
 }
 
 export interface Chats{
@@ -46,6 +48,7 @@ interface AppContextType{
     users: User[] | null;
     setChats: React.Dispatch<React.SetStateAction<Chats[] | null>>;
     removeChat: (chatId: string) => Promise<void>;
+    updateProfile: (formData: FormData) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -128,18 +131,29 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
         const token = Cookies.get("token");
         try {
             await axios.delete(`${chat_service}/api/v1/chats/remove`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
                 data: { chatId }
             });
-            
-            // Remove chat from local state
             setChats(prev => prev ? prev.filter(chat => chat.chat._id !== chatId) : null);
             toast.success("Chat removed successfully");
         } catch (error) {
             console.log(error);
             toast.error("Failed to remove chat");
+        }
+    }
+
+    async function updateProfile(formData: FormData) {
+        const token = Cookies.get("token");
+        try {
+            const { data } = await axios.put(`${user_service}/api/v1/user/update`, formData, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            Cookies.set("token", data.token);
+            setUser(data.user);
+            toast.success("Profile updated successfully");
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update profile");
         }
     }
     
@@ -151,7 +165,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     },[])
 
     return(
-        <AppContext.Provider value={{user,loading,isAuth,setUser,setIsAuth, logoutUser, fetchChats, fetchUsers, chats, users, setChats, removeChat}}>
+        <AppContext.Provider value={{user,loading,isAuth,setUser,setIsAuth, logoutUser, fetchChats, fetchUsers, chats, users, setChats, removeChat, updateProfile}}>
             {children}
             <Toaster/>
         </AppContext.Provider>
