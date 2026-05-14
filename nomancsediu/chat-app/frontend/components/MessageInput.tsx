@@ -1,18 +1,35 @@
 import React from 'react'
-import { useState } from 'react';
-import { Paperclip, Send, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Paperclip, Send, X, Pencil, Smile } from 'lucide-react';
+import { Message } from '@/app/chat/page';
+import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 
 interface MessageInputProps {
     selectedUser: string | null;
     message: string;
     setMessage: (message: string) => void;
-    handleMessageSend: (e: any, imageFile?: File | null) => void
+    handleMessageSend: (e: any, imageFile?: File | null) => void;
+    onTyping: () => void;
+    onStopTyping: () => void;
+    editingMessage?: Message | null;
+    onCancelEdit?: () => void;
 }
 
-const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend }: MessageInputProps) => {
+const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, onTyping, onStopTyping, editingMessage, onCancelEdit }: MessageInputProps) => {
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [showEmoji, setShowEmoji] = useState(false);
+    const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const emojiRef = useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) setShowEmoji(false)
+        }
+        document.addEventListener('mousedown', handler)
+        return () => document.removeEventListener('mousedown', handler)
+    }, [])
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
@@ -26,8 +43,27 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend }: 
 
     if (!selectedUser) return null;
 
+    const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+        onTyping();
+        if (typingTimeout.current) clearTimeout(typingTimeout.current);
+        typingTimeout.current = setTimeout(onStopTyping, 1500);
+    };
+
     return (
-        <form onSubmit={handleSubmit} className='flex flex-col gap-2 border-t border-slate-700 px-5 py-3 bg-slate-950 flex-shrink-0'>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-2 border-t border-slate-800 px-3 py-3 bg-slate-900 flex-shrink-0'>
+            {editingMessage && (
+                <div className='flex items-center justify-between px-3 py-2 bg-slate-800 rounded-lg border-l-2 border-blue-500'>
+                    <div className='flex items-center gap-2'>
+                        <Pencil className='w-3.5 h-3.5 text-blue-400' />
+                        <span className='text-xs text-blue-400 font-medium'>Editing message</span>
+                        <span className='text-xs text-slate-400 truncate max-w-[200px]'>{editingMessage.text}</span>
+                    </div>
+                    <button type='button' onClick={onCancelEdit} className='text-slate-400 hover:text-white'>
+                        <X className='w-4 h-4' />
+                    </button>
+                </div>
+            )}
             {imageFile && (
                 <div className='relative w-fit'>
                     <img src={URL.createObjectURL(imageFile)} alt="preview" className='w-24 h-24 object-cover rounded-lg border border-slate-600' />
@@ -38,8 +74,8 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend }: 
                 </div>
             )}
 
-            <div className="flex items-center gap-2">
-                <label className='cursor-pointer bg-slate-900 hover:bg-slate-700 rounded-lg px-3 py-2 transition-colors border border-slate-700'>
+            <div className="flex items-center gap-1.5">
+                <label className='cursor-pointer flex-shrink-0 bg-slate-900 hover:bg-slate-800 rounded-lg p-2.5 transition-colors border border-slate-800'>
                     <Paperclip size={18} className='text-slate-300' />
                     <input type="file" accept="image/*" className='hidden' onChange={e => {
                         const file = e.target.files?.[0];
@@ -49,13 +85,30 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend }: 
                     }} />
                 </label>
 
-                <input type="text" className='flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors'
+                <div ref={emojiRef} className="relative flex-shrink-0">
+                    {showEmoji && (
+                        <div className="absolute bottom-14 right-0 z-50">
+                            <EmojiPicker
+                                theme={Theme.DARK}
+                                onEmojiClick={(emojiData: EmojiClickData) => setMessage(message + emojiData.emoji)}
+                                height={350}
+                                width={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 32 : 320)}
+                            />
+                        </div>
+                    )}
+                    <button type='button' onClick={() => setShowEmoji(p => !p)}
+                        className='bg-slate-900 hover:bg-slate-800 rounded-lg p-2.5 transition-colors border border-slate-800'>
+                        <Smile size={18} className='text-slate-300' />
+                    </button>
+                </div>
+
+                <input type="text" className='flex-1 min-w-0 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors'
                     placeholder={imageFile ? "Add a caption..." : "Type a message..."}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)} />
+                    onChange={handleTypingChange} />
 
                 <button type='submit' disabled={isUploading || (!message.trim() && !imageFile)}
-                    className='bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg px-3 py-3 transition-colors'>
+                    className='flex-shrink-0 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg p-2.5 transition-colors'>
                     <Send size={18} className='text-white' />
                 </button>
             </div>
