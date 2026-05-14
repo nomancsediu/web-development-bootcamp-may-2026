@@ -47,6 +47,7 @@ const LoginPage = () => {
                 src='/images/logo.png'
                 alt='Alapon Logo'
                 fill
+                sizes='50vw'
                 className='object-cover'
                 priority
             />
