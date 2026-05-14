@@ -4,6 +4,7 @@ import type { AuthenticatedRequest } from "../middleware/isAuth.js"
 import { Chat } from "../models/Chat.js";
 import { Message } from "../models/Messages.js";
 import axios from "axios";
+import { io, userSocketMap } from "../config/socket.js";
 
 export const createNewChat = TryCatch(
     async (req: AuthenticatedRequest, res: Response) => {
@@ -208,6 +209,8 @@ export const sendMessage = TryCatch(
 
 
         //emit socket event to other user in chat
+        const receiverSocketId = userSocketMap[otherUserId.toString()];
+        if (receiverSocketId) io.to(receiverSocketId).emit("newMessage", savedMessage);
 
         res.status(201).json({
             message: savedMessage,
@@ -215,6 +218,100 @@ export const sendMessage = TryCatch(
         });
 });
 
+
+export const deleteMessage = TryCatch(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?._id;
+    const { messageId } = req.params;
+    const { deleteFor } = req.body;
+
+    const message = await Message.findById(messageId);
+    if (!message) { res.status(404).json({ message: "Message not found" }); return; }
+
+    const chat = await Chat.findById(message.chatId);
+    if (!chat) { res.status(404).json({ message: "Chat not found" }); return; }
+
+    if (deleteFor === "everyone") {
+        if (message.sender.toString() !== userId?.toString()) {
+            res.status(403).json({ message: "You can only delete your own messages for everyone" });
+            return;
+        }
+        await Message.findByIdAndUpdate(messageId, { deleted: true, deletedAt: new Date() });
+        const otherUserId = chat.users.find(id => id.toString() !== userId?.toString());
+        const receiverSocketId = otherUserId ? userSocketMap[otherUserId.toString()] : null;
+        if (receiverSocketId) io.to(receiverSocketId).emit("messageDeleted", { messageId, chatId: message.chatId });
+        res.status(200).json({ message: "Message deleted for everyone" });
+    } else {
+        await Message.findByIdAndUpdate(messageId, { $addToSet: { hiddenFrom: userId } });
+        res.status(200).json({ message: "Message deleted for you" });
+    }
+});
+
+export const editMessage = TryCatch(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?._id;
+    const { messageId } = req.params;
+    const { text } = req.body;
+
+    if (!text?.trim()) { res.status(400).json({ message: "Text is required" }); return; }
+
+    const message = await Message.findById(messageId);
+    if (!message) { res.status(404).json({ message: "Message not found" }); return; }
+
+    if (message.sender.toString() !== userId?.toString()) {
+        res.status(403).json({ message: "You can only edit your own messages" });
+        return;
+    }
+
+    if (message.deleted) { res.status(400).json({ message: "Cannot edit a deleted message" }); return; }
+
+    const updated = await Message.findByIdAndUpdate(
+        messageId,
+        { text: text.trim(), edited: true },
+        { new: true }
+    );
+
+    const chat = await Chat.findById(message.chatId);
+    if (chat) {
+        const otherUserId = chat.users.find(id => id.toString() !== userId?.toString());
+        const receiverSocketId = otherUserId ? userSocketMap[otherUserId.toString()] : null;
+        if (receiverSocketId) io.to(receiverSocketId).emit("messageEdited", { messageId, text: text.trim(), chatId: message.chatId });
+    }
+
+    res.status(200).json({ message: updated });
+});
+
+export const reactToMessage = TryCatch(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?._id;
+    const { messageId } = req.params;
+    const { emoji } = req.body;
+
+    if (!emoji) { res.status(400).json({ message: "Emoji is required" }); return; }
+
+    const message = await Message.findById(messageId);
+    if (!message) { res.status(404).json({ message: "Message not found" }); return; }
+
+    const existing = message.reactions.find(r => r.userId === userId?.toString());
+
+    if (existing && existing.emoji === emoji) {
+        await Message.findByIdAndUpdate(messageId, { $pull: { reactions: { userId: userId?.toString() } } });
+    } else if (existing) {
+        await Message.findByIdAndUpdate(messageId, 
+            { $set: { "reactions.$[el].emoji": emoji } },
+            { arrayFilters: [{ "el.userId": userId?.toString() }] }
+        );
+    } else {
+        await Message.findByIdAndUpdate(messageId, { $push: { reactions: { userId: userId?.toString(), emoji } } });
+    }
+
+    const updated = await Message.findById(messageId);
+    const chat = await Chat.findById(message.chatId);
+    if (chat) {
+        const otherUserId = chat.users.find(id => id.toString() !== userId?.toString());
+        const receiverSocketId = otherUserId ? userSocketMap[otherUserId.toString()] : null;
+        if (receiverSocketId) io.to(receiverSocketId).emit("messageReacted", { messageId, reactions: updated?.reactions, chatId: message.chatId });
+    }
+
+    res.status(200).json({ reactions: updated?.reactions });
+});
 
 export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res: Response)=>{
    const userId = req.user?._id;
@@ -252,24 +349,18 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
         return;
     }
 
-    const messegesToMarkSeen = await Message.find({
-        chatId,
-        seen: false,
-        sender: {$ne: userId},
-
-    });
+    const unseenMessages = await Message.find({ chatId, seen: false, sender: { $ne: userId } }, "_id sender");
 
     await Message.updateMany(
-        {
-            chatId,
-            seen: false,
-            sender: {$ne: userId},
-        },
-        {
-            seen: true,
-            seetAt: new Date(),
-        }
+        { chatId, seen: false, sender: { $ne: userId } },
+        { seen: true, seenAt: new Date() }
     );
+
+    if (unseenMessages.length > 0) {
+        const firstSender = unseenMessages[0]?.sender?.toString();
+        const senderSocketId = firstSender ? userSocketMap[firstSender] : null;
+        if (senderSocketId) io.to(senderSocketId).emit("messagesSeen", { chatId });
+    }
 
 
     const messages = await Message.find({chatId}).sort({createdAt: 1});
@@ -286,8 +377,6 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
         });
         return;
     };
-
-    //socket work
 
     res.status(200).json({  
         messages,
