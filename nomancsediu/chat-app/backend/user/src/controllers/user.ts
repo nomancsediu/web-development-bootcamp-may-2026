@@ -6,6 +6,7 @@ import { User } from "../model/User.js";
 import { generateToken } from "../config/generateToken.js";
 import type { AuthenticatedRequest } from "../middleware/isAuth.js";
 import token from "jsonwebtoken";
+import cloudinary from "../config/cloudinary.js";
 
 // OTP Generation 
 export const loginUser = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -123,28 +124,26 @@ export const getAUser = TryCatch(async(req: Request, res: Response) => {
     res.json({ user });
 });
 
-export const updateName = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
+export const updateProfile = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
   const user = await User.findById(req.user?._id);
 
-  if(!user)
-  {
-    res.status(404).json({
-      message:"User not found",
-    });
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
     return;
   }
-  else
-  {
-    user.name = req.body.name;
-    await user.save();
+
+  if (req.body.name) user.name = req.body.name;
+
+  if (req.body.isInvisible !== undefined) user.isInvisible = req.body.isInvisible === "true" || req.body.isInvisible === true;
+
+  if (req.file) {
+    if (user.avatar?.publicId) await cloudinary.uploader.destroy(user.avatar.publicId);
+    user.avatar = { url: req.file.path, publicId: req.file.filename };
   }
+
+  await user.save();
 
   const updatedToken = generateToken(user);
 
-  res.json({
-    message:"Name updated successfully",
-    token: updatedToken,
-    user,
-  });
-
+  res.json({ message: "Profile updated successfully", token: updatedToken, user });
 });
