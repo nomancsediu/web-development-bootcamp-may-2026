@@ -1,14 +1,14 @@
 import express from 'express';
-import dotenv  from  'dotenv';
+import dotenv from 'dotenv';
 import connectDb from './config/db.js';
 import {createClient} from 'redis';
 import userRoutes from "./routes/user.js";
 import { connectRabbitMQ } from './config/rabitmq.js';
+import cors from 'cors';
 
 dotenv.config();
 
-connectDb();  
-
+connectDb();
 connectRabbitMQ();
 
 export const redisClient = createClient({
@@ -19,6 +19,7 @@ redisClient.connect().then(() => console.log("Redis connected")).catch(console.e
 
 const app = express();
 
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 
 app.use("/api/v1", userRoutes);

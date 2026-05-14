@@ -90,15 +90,14 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
       email
     });
   }
-  else{
-    const token = generateToken(user);
-    res.json({
-      message:"User Verified",
-      token,
-      user,
-      success:true
-    })
-  }
+
+  const token = generateToken(user);
+  res.json({
+    message:"User Verified",
+    token,
+    user,
+    success:true
+  });
 
 });
 
@@ -140,11 +139,11 @@ export const updateName = TryCatch(async(req: AuthenticatedRequest, res: Respons
     await user.save();
   }
 
-  const tokwn = generateToken(user);
+  const updatedToken = generateToken(user);
 
   res.json({
     message:"Name updated successfully",
-    token,
+    token: updatedToken,
     user,
   });
 
