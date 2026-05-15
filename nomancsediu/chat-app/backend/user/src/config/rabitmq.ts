@@ -5,25 +5,28 @@ let connection: any;
 let channel: any;
 
 export const connectRabbitMQ = async() => {
+    let retries = 10;
+    while (retries > 0) {
+        try {
+            connection = await amqp.connect({
+                protocol: 'amqp',
+                hostname: process.env.RABBITMQ_HOST!,
+                port: 5672,
+                username: process.env.RABBITMQ_USERNAME!,
+                password: process.env.RABBITMQ_PASSWORD!
+            });
 
-    try {
-        const connection = await amqp.connect({
-            protocol: 'amqp',
-            hostname: process.env.RABBITMQ_HOST!,
-            port: 5672,
-            username: process.env.RABBITMQ_USERNAME!,
-            password: process.env.RABBITMQ_PASSWORD!
+            channel = await connection.createChannel();
 
-        });
-
-        channel = await connection.createChannel();
-
-        console.log("Connected to RabbitMQ");
-        
-    } catch (error) {
-        console.log("Failed to connect RabbitMQ", error);
-        
+            console.log("Connected to RabbitMQ");
+            return;
+        } catch (error) {
+            console.log(`Failed to connect RabbitMQ, retries left: ${retries}`, error);
+            retries--;
+            await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
+        }
     }
+    console.log("Failed to connect to RabbitMQ after all retries");
 };
 
 
