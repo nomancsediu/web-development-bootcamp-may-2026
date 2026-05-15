@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Message } from '@/app/chat/page'
 import { User } from '@/context/AppContext'
 import moment from 'moment'
-import { Check, CheckCheck, Pencil, Trash2, SmilePlus } from 'lucide-react'
+import { Check, CheckCheck, Pencil, Trash2, SmilePlus, FileText, Download } from 'lucide-react'
 
 interface ChatMessagesProps {
     selectedUser: string | null
@@ -37,6 +37,24 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
     const [menuPos, setMenuPos] = useState<{ top: number; left: number; transformOrigin: string } | null>(null)
     const [reactionBar, setReactionBar] = useState<{ messageId: string; top: number; left: number } | null>(null)
 
+    const handleDownload = (file: { url: string; name: string }) => {
+        const link = document.createElement('a')
+        link.href = file.url
+        link.download = file.name
+        link.target = '_blank'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+
+    const getFileIcon = (type: string) => {
+        if (type.includes('pdf')) return '📄'
+        if (type.includes('word') || type.includes('doc')) return '📝'
+        if (type.includes('text')) return '📃'
+        if (type.includes('zip') || type.includes('rar')) return '🗜️'
+        return '📎'
+    }
+
     const uniqueMessages = useMemo(() => {
         if (!messages) return []
         const seen = new Set()
@@ -70,18 +88,18 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
         const isSentByMe = msg.sender === loggedInUser?._id
         
         // Calculate position with viewport boundaries
-        const reactionBarWidth = 220
+        const reactionBarWidth = window.innerWidth < 640 ? 200 : 220
         let left = isSentByMe ? rect.right - reactionBarWidth : rect.left
         
         // Ensure reaction bar stays within viewport
-        if (left < 10) left = 10
-        if (left + reactionBarWidth > window.innerWidth - 10) {
-            left = window.innerWidth - reactionBarWidth - 10
+        if (left < 8) left = 8
+        if (left + reactionBarWidth > window.innerWidth - 8) {
+            left = window.innerWidth - reactionBarWidth - 8
         }
         
         setReactionBar({
             messageId: msg._id,
-            top: Math.max(10, rect.top - 48),
+            top: Math.max(8, rect.top - 44),
             left,
         })
     }
@@ -95,26 +113,26 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
         
         // Calculate menu dimensions
         const buttonCount = isSentByMe ? (isText ? 3 : 2) : 1
-        const menuHeight = buttonCount * 48
-        const menuWidth = 192
+        const menuHeight = buttonCount * 44
+        const menuWidth = 180
         
         // Calculate position with viewport boundaries
         const openAbove = rect.top - containerRect.top >= menuHeight
-        let top = openAbove ? rect.top - menuHeight : rect.bottom
+        let top = openAbove ? rect.top - menuHeight - 4 : rect.bottom + 4
         let left = isSentByMe ? rect.right - menuWidth : rect.left
         
         // Ensure menu stays within viewport
-        if (left < 10) left = 10
-        if (left + menuWidth > window.innerWidth - 10) {
-            left = window.innerWidth - menuWidth - 10
+        if (left < 8) left = 8
+        if (left + menuWidth > window.innerWidth - 8) {
+            left = window.innerWidth - menuWidth - 8
         }
-        if (top < 10) top = rect.bottom
-        if (top + menuHeight > window.innerHeight - 10) {
-            top = rect.top - menuHeight
+        if (top < 8) top = rect.bottom + 4
+        if (top + menuHeight > window.innerHeight - 8) {
+            top = rect.top - menuHeight - 4
         }
         
         setMenuPos({ 
-            top: Math.max(10, top), 
+            top: Math.max(8, top), 
             left, 
             transformOrigin: openAbove ? 'bottom' : 'top' 
         })
@@ -147,6 +165,21 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
                                                 <>
                                                     {e.messageType === 'image' && e.image && (
                                                         <img src={e.image.url} alt="Shared Image" className='max-w-full h-auto rounded-xl mb-1' />
+                                                    )}
+                                                    {e.messageType === 'file' && e.file && (
+                                                        <div className='flex items-center gap-3 bg-slate-800/50 rounded-lg p-3 mb-2 min-w-[200px]'>
+                                                            <div className='text-3xl'>{getFileIcon(e.file.type)}</div>
+                                                            <div className='flex-1 min-w-0'>
+                                                                <p className='text-sm font-medium truncate'>{e.file.name}</p>
+                                                                <p className='text-xs text-slate-400'>{(e.file.size / 1024).toFixed(1)} KB</p>
+                                                            </div>
+                                                            <button
+                                                                onClick={(ev) => { ev.stopPropagation(); handleDownload(e.file!) }}
+                                                                className='p-2 hover:bg-slate-700 rounded-lg transition-colors'
+                                                            >
+                                                                <Download className='w-4 h-4' />
+                                                            </button>
+                                                        </div>
                                                     )}
                                                     {e.text && <p className='leading-snug'>{e.text}</p>}
                                                 </>
@@ -199,17 +232,17 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
             {reactionBar && (
                 <div
                     data-menu
-                    className="fixed z-50 flex gap-1 bg-slate-800 border border-slate-700 rounded-full px-2 py-1.5 shadow-2xl"
+                    className="fixed z-50 flex gap-0.5 sm:gap-1 bg-slate-800 border border-slate-700 rounded-full px-1.5 sm:px-2 py-1 sm:py-1.5 shadow-2xl"
                     style={{ 
                         top: reactionBar.top, 
                         left: reactionBar.left,
-                        maxWidth: 'calc(100vw - 20px)'
+                        maxWidth: 'calc(100vw - 16px)'
                     }}
                 >
                     {QUICK_EMOJIS.map(emoji => (
                         <button
                             key={emoji}
-                            className="text-lg sm:text-xl hover:scale-125 transition-transform p-1 min-w-[32px] flex items-center justify-center"
+                            className="text-base sm:text-lg md:text-xl hover:scale-125 active:scale-110 transition-transform p-1 min-w-[28px] sm:min-w-[32px] flex items-center justify-center"
                             onClick={() => { onReact(reactionBar.messageId, emoji); setReactionBar(null) }}
                         >{emoji}</button>
                     ))}
@@ -219,34 +252,37 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
             {modalMessage && menuPos && (
                 <div
                     data-menu
-                    className="fixed z-50 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden w-44 sm:w-48"
+                    className="fixed z-50 bg-slate-800 border border-slate-700 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden w-40 sm:w-44 md:w-48"
                     style={{ 
                         top: menuPos.top, 
                         left: menuPos.left,
-                        maxWidth: 'calc(100vw - 20px)'
+                        maxWidth: 'calc(100vw - 16px)'
                     }}
                 >
                     {modalMessage.sender === loggedInUser?._id && modalMessage.messageType === 'text' && (
                         <button
-                            className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition-colors"
+                            className="flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white hover:bg-slate-700 transition-colors"
                             onClick={() => { onEditStart(modalMessage); closeMenu(); }}
                         >
-                            <Pencil className="w-4 h-4 text-blue-400" /> Edit
+                            <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" /> 
+                            <span>Edit</span>
                         </button>
                     )}
                     {modalMessage.sender === loggedInUser?._id && (
                         <button
-                            className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-400 hover:bg-slate-700 transition-colors"
+                            className="flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-red-400 hover:bg-slate-700 transition-colors"
                             onClick={() => { onDeleteMessage(modalMessage._id, "everyone"); closeMenu(); }}
                         >
-                            <Trash2 className="w-4 h-4" /> Delete for Everyone
+                            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> 
+                            <span>Delete for Everyone</span>
                         </button>
                     )}
                     <button
-                        className="flex items-center gap-3 w-full px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 transition-colors"
+                        className="flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-300 hover:bg-slate-700 transition-colors"
                         onClick={() => { onDeleteMessage(modalMessage._id, "me"); closeMenu(); }}
                     >
-                        <Trash2 className="w-4 h-4 text-slate-400" /> Delete for Me
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" /> 
+                        <span>Delete for Me</span>
                     </button>
                 </div>
             )}

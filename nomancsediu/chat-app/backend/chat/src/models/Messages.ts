@@ -5,7 +5,8 @@ export interface IMessage extends Document {
     sender: string;
     text?: string;
     image?: { url: string; publicId: string; };
-    messageType: "text" | "image";
+    file?: { url: string; publicId: string; name: string; size: number; type: string; };
+    messageType: "text" | "image" | "file";
     seen: boolean;
     seenAt?: Date;
     hiddenFrom: string[];
@@ -32,12 +33,19 @@ const schema: Schema<IMessage> = new Schema(
             type: String,
         },
         image: {
-            url: String,
-            publicId: String,
+            url: { type: String },
+            publicId: { type: String },
+        },
+        file: {
+            url: { type: String },
+            publicId: { type: String },
+            name: { type: String },
+            size: { type: Number },
+            type: { type: String },
         },
         messageType: {
             type: String,
-            enum: ["text", "image"],
+            enum: ["text", "image", "file"],
             default: "text",
         },
         seen: {

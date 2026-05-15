@@ -134,7 +134,7 @@ export const sendMessage = TryCatch(
 
         if(!text && !imageFile){
             res.status(400).json({
-                message:"Either text or image is required",
+                message:"Either text or file is required",
             });
             return; 
         }
@@ -175,17 +175,31 @@ export const sendMessage = TryCatch(
             chatId: chatId,
             sender: senderId,
             seen: false,
-            seetAt: undefined,
+            seenAt: undefined,
         };
 
         if(imageFile){
-            messageData.image = {
-                url: imageFile.path,
-                publicId: imageFile.filename,
-            };
+            const mimeType = imageFile.mimetype;
+            const isImage = mimeType.startsWith('image/');
 
-            messageData.messageType = "image";
-            messageData.text = text || "";
+            if(isImage){
+                messageData.image = {
+                    url: imageFile.path,
+                    publicId: imageFile.filename,
+                };
+                messageData.messageType = "image";
+                messageData.text = text || "";
+            } else {
+                messageData.file = {
+                    url: imageFile.path,
+                    publicId: imageFile.filename,
+                    name: imageFile.originalname,
+                    size: imageFile.size,
+                    type: mimeType,
+                };
+                messageData.messageType = "file";
+                messageData.text = text || "";
+            }
         }
         else{
             messageData.text = text;
@@ -195,7 +209,11 @@ export const sendMessage = TryCatch(
         const message = new Message(messageData);
         const savedMessage = await message.save();
 
-        const latestMessageText = imageFile ? "Sent an image" : text;
+        let latestMessageText = text;
+        if(imageFile){
+            const isImage = imageFile.mimetype.startsWith('image/');
+            latestMessageText = isImage ? "Sent an image" : `Sent a file: ${imageFile.originalname}`;
+        }
 
         await Chat.findByIdAndUpdate(chatId, {
             latestMessage: {

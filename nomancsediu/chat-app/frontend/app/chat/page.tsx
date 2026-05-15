@@ -25,7 +25,14 @@ export interface Message {
     url: string;
     publicId: string;
   };
-  messageType: 'text' | 'image';
+  file?: {
+    url: string;
+    publicId: string;
+    name: string;
+    size: number;
+    type: string;
+  };
+  messageType: 'text' | 'image' | 'file';
   seen: boolean;
   seenAt?: string;
   deleted?: boolean;
@@ -310,6 +317,31 @@ const ChatApp = () => {
     }
   }
 
+  async function handleDeleteChat(chatId: string) {
+    const token = Cookies.get("token");
+    try {
+      await axios.delete(`${chat_service}/api/v1/chat/${chatId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setChats(prev => prev ? prev.filter(chat => chat.chat._id !== chatId) : null);
+      setSelectedUser(null);
+      setMessageCache(prev => {
+        const newCache = { ...prev };
+        delete newCache[chatId];
+        return newCache;
+      });
+      setUserCache(prev => {
+        const newCache = { ...prev };
+        delete newCache[chatId];
+        return newCache;
+      });
+      toast.success("Chat deleted successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete chat");
+    }
+  }
+
   return (
     <div className='h-screen flex bg-slate-950 text-white overflow-hidden'>
       {/* Mobile + Tablet: sidebar shown when no user selected */}
@@ -351,7 +383,7 @@ const ChatApp = () => {
       <div className={`lg:ml-80 flex-1 flex flex-col h-screen overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
         {selectedUser ? (
           <>
-            <ChatHeader selectedUser={selectedUser} user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} />
+            <ChatHeader selectedUser={selectedUser} user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} onDeleteChat={handleDeleteChat} />
             <ChatMessages selectedUser={selectedUser} messages={messages} loggedInUser={loggedInUser} onDeleteMessage={handleDeleteMessage} onEditStart={handleEditStart} onReact={handleReactToMessage} />
             <MessageInput selectedUser={selectedUser} message={message} setMessage={setMessage} handleMessageSend={handleMessageSend}
               onTyping={() => socket?.emit("typing", user?._id)}

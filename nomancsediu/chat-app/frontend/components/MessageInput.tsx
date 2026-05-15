@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useRef } from 'react';
-import { Paperclip, Send, X, Pencil, Smile } from 'lucide-react';
+import { Paperclip, Send, X, Pencil, Smile, FileText } from 'lucide-react';
 import { Message } from '@/app/chat/page';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 
@@ -23,6 +23,8 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
     const [isMobile, setIsMobile] = useState(false);
     const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const emojiRef = useRef<HTMLDivElement>(null);
+
+    const isImage = imageFile && imageFile.type.startsWith('image/');
 
     React.useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -82,7 +84,17 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
             )}
             {imageFile && (
                 <div className='relative w-fit'>
-                    <img src={URL.createObjectURL(imageFile)} alt="preview" className='w-24 h-24 object-cover rounded-lg border border-slate-600' />
+                    {isImage ? (
+                        <img src={URL.createObjectURL(imageFile)} alt="preview" className='w-24 h-24 object-cover rounded-lg border border-slate-600' />
+                    ) : (
+                        <div className='flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg border border-slate-600'>
+                            <FileText className='w-5 h-5 text-blue-400' />
+                            <div className='flex flex-col'>
+                                <span className='text-xs text-white font-medium truncate max-w-[150px]'>{imageFile.name}</span>
+                                <span className='text-xs text-slate-400'>{(imageFile.size / 1024).toFixed(1)} KB</span>
+                            </div>
+                        </div>
+                    )}
                     <button type='button' className='absolute -top-2 -right-2 bg-black rounded-full p-1'
                         onClick={() => setImageFile(null)}>
                         <X className='w-4 h-4 text-white' />
@@ -93,9 +105,14 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
             <div className="flex items-center gap-1.5">
                 <label className='cursor-pointer flex-shrink-0 bg-slate-900 hover:bg-slate-800 rounded-lg p-2.5 transition-colors border border-slate-800'>
                     <Paperclip size={18} className='text-slate-300' />
-                    <input type="file" accept="image/*" className='hidden' onChange={e => {
+                    <input type="file" accept="image/*,.pdf,.doc,.docx,.txt,.zip,.rar" className='hidden' onChange={e => {
                         const file = e.target.files?.[0];
-                        if (file && file.type.startsWith("image/")) {
+                        if (file) {
+                            const maxSize = 10 * 1024 * 1024; // 10MB
+                            if (file.size > maxSize) {
+                                alert('File size must be less than 10MB');
+                                return;
+                            }
                             setImageFile(file);
                         }
                     }} />

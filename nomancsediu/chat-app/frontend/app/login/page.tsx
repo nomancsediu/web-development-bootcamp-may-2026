@@ -78,7 +78,7 @@ const LoginPage = () => {
 
                 <div className='mb-7'>
                     <h1 className='text-2xl sm:text-4xl font-bold text-white mb-2'>
-                        Welcome Back
+                        Welcome to Alapon
                     </h1>
                     <p className='text-gray-400 text-sm sm:text-lg'>
                         Enter your email to continue your journey

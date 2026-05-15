@@ -130,9 +130,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     async function removeChat(chatId: string) {
         const token = Cookies.get("token");
         try {
-            await axios.delete(`${chat_service}/api/v1/chats/remove`, {
-                headers: { Authorization: `Bearer ${token}` },
-                data: { chatId }
+            await axios.delete(`${chat_service}/api/v1/chat/${chatId}`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             setChats(prev => prev ? prev.filter(chat => chat.chat._id !== chatId) : null);
             toast.success("Chat removed successfully");
