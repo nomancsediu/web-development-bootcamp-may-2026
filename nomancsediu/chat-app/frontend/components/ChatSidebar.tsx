@@ -30,7 +30,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 bg-black/50 z-10" onClick={() => setSidebarOpen(false)} />
       )}
-      <aside className={`fixed z-20 top-0 left-0 h-screen lg:h-screen h-[100dvh]
+      <aside className={`fixed z-20 top-0 left-0 h-screen
         w-full lg:w-80 bg-slate-900 border-r border-slate-800 transform
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300
         flex flex-col`}>
@@ -56,7 +56,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
             <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400' />
             <input
               type="text"
-              placeholder={showAllUser ? 'Search users to start chatting...' : 'Search chats...'}
+              placeholder={showAllUser ? 'Search users...' : 'Search chats...'}
               className='w-full pl-9 pr-4 py-2.5 bg-slate-900 border border-slate-800 text-white placeholder-slate-500 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-colors'
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
@@ -65,43 +65,26 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
         </div>
 
         {/* Content */}
-        <div className='flex-1 overflow-y-auto px-3 py-2 min-h-0 pb-20 lg:pb-2 overscroll-contain'>
+        <div className='flex-1 overflow-y-auto px-3 py-2 min-h-0'>
           {showAllUser ? (
             <div className='space-y-1'>
-              {!searchQuery.trim() ? (
-                <div className='flex flex-col items-center justify-center h-full text-center py-16'>
-                  <Search className='w-12 h-12 text-slate-600 mb-4' />
-                  <h3 className='text-slate-300 font-medium text-base mb-2'>Search for Users</h3>
-                  <p className='text-slate-500 text-sm px-4'>Type in the search box above to find users and start a new conversation.</p>
-                </div>
-              ) : (
-                users?.filter(u => u._id !== loggedInUser?._id &&
-                  u.name.toLowerCase().includes(searchQuery.toLowerCase())
-                ).length ? (
-                  users.filter(u => u._id !== loggedInUser?._id &&
-                    u.name.toLowerCase().includes(searchQuery.toLowerCase())
-                  ).map(u => (
-                    <button key={u._id}
-                      className='w-full text-left px-3 py-3 rounded-xl hover:bg-slate-900 transition-colors flex items-center gap-3'
-                      onClick={() => { createChat(u); setShowAllUser(false); setSearchQuery(''); }}>
-                      <div className='w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0'>
-                        {(u as any).avatar?.url
-                          ? <img src={(u as any).avatar.url} alt={u.name} className='w-full h-full object-cover' />
-                          : <UserCircle className='w-6 h-6 text-slate-300' />}
-                      </div>
-                      <div className='flex-1 min-w-0'>
-                        <span className='font-medium text-white text-sm block truncate'>{u.name}</span>
-                        <span className='text-xs text-slate-400'>Tap to start chatting</span>
-                      </div>
-                    </button>
-                  ))
-                ) : (
-                  <div className='flex flex-col items-center justify-center text-center py-16'>
-                    <UserCircle className='w-12 h-12 text-slate-600 mb-4' />
-                    <h3 className='text-slate-300 font-medium text-base mb-2'>No Users Found</h3>
-                    <p className='text-slate-500 text-sm px-4'>No users match your search "{searchQuery}". Try a different search term.</p>
+              {users?.filter(u => u._id !== loggedInUser?._id &&
+                (!searchQuery.trim() || u.name.toLowerCase().includes(searchQuery.toLowerCase()))
+              ).map(u => (
+                <button key={u._id}
+                  className='w-full text-left px-3 py-3 rounded-xl hover:bg-slate-900 transition-colors flex items-center gap-3'
+                  onClick={() => { createChat(u); setShowAllUser(false); setSearchQuery(''); }}>
+                  <div className='w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0'>
+                    {(u as any).avatar?.url
+                      ? <img src={(u as any).avatar.url} alt={u.name} className='w-full h-full object-cover' />
+                      : <UserCircle className='w-6 h-6 text-slate-300' />}
                   </div>
-                )
+                  <span className='font-medium text-white text-sm'>{u.name}</span>
+                </button>
+              ))}
+              {!users?.filter(u => u._id !== loggedInUser?._id &&
+                (!searchQuery.trim() || u.name.toLowerCase().includes(searchQuery.toLowerCase()))).length && (
+                <p className='text-slate-500 text-sm text-center py-8'>No users found</p>
               )}
             </div>
           ) : (
@@ -159,7 +142,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
         </div>
 
         {/* Footer */}
-        <div className='lg:relative fixed bottom-0 left-0 right-0 lg:left-auto lg:right-auto p-3 border-t border-slate-800 flex gap-2 bg-slate-900'>
+        <div className='p-3 border-t border-slate-800 flex gap-2'>
           <Link href='/settings' className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 transition-colors flex-1 border border-slate-800'>
             <Settings className='w-4 h-4 text-slate-300' />
             <span className='text-sm text-slate-300 font-medium'>Settings</span>

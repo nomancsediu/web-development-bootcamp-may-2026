@@ -8,25 +8,3 @@
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out;
 }
-
-/* Mobile chat layout fixes */
-@media (max-width: 1023px) {
-  html, body {
-    height: 100dvh;
-    overflow: hidden;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  body {
-    position: fixed;
-    width: 100%;
-  }
-}
-
-/* Prevent zoom on input focus on iOS */
-@media screen and (max-width: 1023px) {
-  input[type="text"], input[type="email"], input[type="password"], textarea {
-    font-size: 16px !important;
-  }
-}
