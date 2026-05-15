@@ -66,27 +66,58 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
     const openReactionBar = (e: React.MouseEvent, msg: Message) => {
         e.stopPropagation()
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+        const containerRect = containerRef.current!.getBoundingClientRect()
         const isSentByMe = msg.sender === loggedInUser?._id
+        
+        // Calculate position with viewport boundaries
+        const reactionBarWidth = 220
+        let left = isSentByMe ? rect.right - reactionBarWidth : rect.left
+        
+        // Ensure reaction bar stays within viewport
+        if (left < 10) left = 10
+        if (left + reactionBarWidth > window.innerWidth - 10) {
+            left = window.innerWidth - reactionBarWidth - 10
+        }
+        
         setReactionBar({
             messageId: msg._id,
-            top: rect.top - 48,
-            left: isSentByMe ? rect.right - 220 : rect.left,
+            top: Math.max(10, rect.top - 48),
+            left,
         })
     }
 
     const openMenu = (e: React.MouseEvent, msg: Message) => {
         if (msg.deleted) return
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+        const containerRect = containerRef.current!.getBoundingClientRect()
         const isSentByMe = msg.sender === loggedInUser?._id
         const isText = msg.messageType === 'text'
-        // sent: Edit + Delete Everyone + Delete Me = 3 buttons; received: Delete Me = 1 button
+        
+        // Calculate menu dimensions
         const buttonCount = isSentByMe ? (isText ? 3 : 2) : 1
         const menuHeight = buttonCount * 48
-        const containerRect = containerRef.current!.getBoundingClientRect()
+        const menuWidth = 192
+        
+        // Calculate position with viewport boundaries
         const openAbove = rect.top - containerRect.top >= menuHeight
-        const top = openAbove ? rect.top - menuHeight : rect.bottom
-        const left = isSentByMe ? rect.right - 192 : rect.left
-        setMenuPos({ top, left, transformOrigin: openAbove ? 'bottom' : 'top' })
+        let top = openAbove ? rect.top - menuHeight : rect.bottom
+        let left = isSentByMe ? rect.right - menuWidth : rect.left
+        
+        // Ensure menu stays within viewport
+        if (left < 10) left = 10
+        if (left + menuWidth > window.innerWidth - 10) {
+            left = window.innerWidth - menuWidth - 10
+        }
+        if (top < 10) top = rect.bottom
+        if (top + menuHeight > window.innerHeight - 10) {
+            top = rect.top - menuHeight
+        }
+        
+        setMenuPos({ 
+            top: Math.max(10, top), 
+            left, 
+            transformOrigin: openAbove ? 'bottom' : 'top' 
+        })
         setModalMessage(msg)
     }
 
@@ -102,7 +133,7 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
                         const isSentByMe = e.sender === loggedInUser?._id
                         return (
                             <div key={`${e._id}-${i}`} className={`flex ${isSentByMe ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`flex flex-col max-w-[85%] sm:max-w-[75%] md:max-w-[70%] lg:max-w-[65%] ${isSentByMe ? 'items-end' : 'items-start'}`}>
+                                <div className={`flex flex-col max-w-[90%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] ${isSentByMe ? 'items-end' : 'items-start'}`}>
                                     <div className="relative group">
                                         <div
                                             className={`px-4 py-3 rounded-2xl text-[15px] text-white shadow-sm cursor-pointer select-none ${
@@ -168,13 +199,17 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
             {reactionBar && (
                 <div
                     data-menu
-                    className="fixed z-50 flex gap-1 bg-slate-800 border border-slate-700 rounded-full px-3 py-2 shadow-2xl"
-                    style={{ top: reactionBar.top, left: reactionBar.left }}
+                    className="fixed z-50 flex gap-1 bg-slate-800 border border-slate-700 rounded-full px-2 py-1.5 shadow-2xl"
+                    style={{ 
+                        top: reactionBar.top, 
+                        left: reactionBar.left,
+                        maxWidth: 'calc(100vw - 20px)'
+                    }}
                 >
                     {QUICK_EMOJIS.map(emoji => (
                         <button
                             key={emoji}
-                            className="text-xl hover:scale-125 transition-transform"
+                            className="text-lg sm:text-xl hover:scale-125 transition-transform p-1 min-w-[32px] flex items-center justify-center"
                             onClick={() => { onReact(reactionBar.messageId, emoji); setReactionBar(null) }}
                         >{emoji}</button>
                     ))}
@@ -184,8 +219,12 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
             {modalMessage && menuPos && (
                 <div
                     data-menu
-                    className="fixed z-50 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden w-48"
-                    style={{ top: menuPos.top, left: menuPos.left }}
+                    className="fixed z-50 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden w-44 sm:w-48"
+                    style={{ 
+                        top: menuPos.top, 
+                        left: menuPos.left,
+                        maxWidth: 'calc(100vw - 20px)'
+                    }}
                 >
                     {modalMessage.sender === loggedInUser?._id && modalMessage.messageType === 'text' && (
                         <button

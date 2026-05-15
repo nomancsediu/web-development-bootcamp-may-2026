@@ -1,0 +1,110 @@
+services:
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - user
+      - chat
+      - frontend
+
+  user:
+    build:
+      context: ./backend/user
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_URL=${REDIS_URL}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - MAIL_USER=${MAIL_USER}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health"]
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      interval: 30s
+
+  chat:
+    build:
+      context: ./backend/chat
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "5002"
+    environment:
+      - PORT=5002
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - USER_SERVICE=${USER_SERVICE}
+    depends_on:
+      - user
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5002/health"]
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      interval: 30s
+
+  mail:
+    build:
+      context: ./backend/mail
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "5003"
+    environment:
+      - PORT=5003
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - MAIL_USER=${MAIL_USER}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5003/health"]
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      interval: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_USER_SERVICE: ${NEXT_PUBLIC_USER_SERVICE}
+        NEXT_PUBLIC_CHAT_SERVICE: ${NEXT_PUBLIC_CHAT_SERVICE}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_USER_SERVICE=${NEXT_PUBLIC_USER_SERVICE}
+      - NEXT_PUBLIC_CHAT_SERVICE=${NEXT_PUBLIC_CHAT_SERVICE}
+    depends_on:
+      - user
+      - chat
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      interval: 30s
