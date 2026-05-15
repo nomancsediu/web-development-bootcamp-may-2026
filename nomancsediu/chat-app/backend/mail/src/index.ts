@@ -8,6 +8,11 @@ startSendOtpConsumer();
 
 const app = express();
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', service: 'mail-service' });
+});
+
 app.listen(process.env.PORT,() => {
-    console.log(`Sever is running on port ${process.env.PORT}`);
+    console.log(`Server is running on port ${process.env.PORT}`);
 });

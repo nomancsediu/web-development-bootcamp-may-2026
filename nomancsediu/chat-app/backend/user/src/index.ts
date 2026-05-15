@@ -19,10 +19,29 @@ redisClient.connect().then(() => console.log("Redis connected")).catch(console.e
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// CORS configuration for production
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:8080',
+        'http://103.42.5.187:8080',
+        'http://103.42.5.187:5000',
+        'http://103.42.5.187:5002'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/v1", userRoutes);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', service: 'user-service' });
+});
 
 const port = process.env.PORT;
 
