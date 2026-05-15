@@ -45,7 +45,7 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 🛠️ Tech Stack
 
-<table>
+<table width="100%">
   <tr>
     <th colspan="2" align="center">Frontend</th>
   </tr>
@@ -61,7 +61,7 @@ A **scalable** real-time chat application built with **microservices architectur
   </tr>
 </table>
 
-<table>
+<table width="100%">
   <tr>
     <th align="center">User Service</th>
     <th align="center">Chat Service</th>
@@ -91,7 +91,7 @@ A **scalable** real-time chat application built with **microservices architectur
   </tr>
 </table>
 
-<table>
+<table width="100%">
   <tr>
     <th colspan="4" align="center">Infrastructure & DevOps</th>
   </tr>
@@ -129,7 +129,7 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 📸 Screenshots
 
-<table>
+<table width="100%">
   <tr>
     <td align="center" width="50%">
       <img src="readme-photos/login-page.png" alt="Login Page" width="100%" />
