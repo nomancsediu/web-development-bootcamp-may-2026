@@ -20,16 +20,32 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [showEmoji, setShowEmoji] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const emojiRef = useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) setShowEmoji(false)
-        }
-        document.addEventListener('mousedown', handler)
-        return () => document.removeEventListener('mousedown', handler)
-    }, [])
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    React.useEffect(() => {
+        const handler = (e: MouseEvent | TouchEvent) => {
+            if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+                setShowEmoji(false);
+            }
+        };
+        
+        document.addEventListener('mousedown', handler);
+        document.addEventListener('touchstart', handler, { passive: true });
+        
+        return () => {
+            document.removeEventListener('mousedown', handler);
+            document.removeEventListener('touchstart', handler);
+        };
+    }, []);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
@@ -87,14 +103,35 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
 
                 <div ref={emojiRef} className="relative flex-shrink-0">
                     {showEmoji && (
-                        <div className="absolute bottom-14 left-0 z-50">
-                            <EmojiPicker
-                                theme={Theme.DARK}
-                                onEmojiClick={(emojiData: EmojiClickData) => setMessage(message + emojiData.emoji)}
-                                height={350}
-                                width={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 32 : 320)}
-                            />
-                        </div>
+                        isMobile ? (
+                            <div 
+                                className="fixed inset-0 flex items-end justify-center z-50 bg-black/40 animate-in fade-in duration-200 pb-20"
+                                onClick={(e) => e.target === e.currentTarget && setShowEmoji(false)}
+                                onTouchStart={(e) => e.target === e.currentTarget && setShowEmoji(false)}
+                            >
+                                <div 
+                                    className="animate-in slide-in-from-bottom-4 duration-200"
+                                    onClick={(e) => e.stopPropagation()}
+                                    onTouchStart={(e) => e.stopPropagation()}
+                                >
+                                    <EmojiPicker
+                                        theme={Theme.DARK}
+                                        onEmojiClick={(emojiData: EmojiClickData) => setMessage(message + emojiData.emoji)}
+                                        height={Math.min(400, window.innerHeight - 200)}
+                                        width={Math.min(380, window.innerWidth - 32)}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="absolute bottom-14 left-0 z-50">
+                                <EmojiPicker
+                                    theme={Theme.DARK}
+                                    onEmojiClick={(emojiData: EmojiClickData) => setMessage(message + emojiData.emoji)}
+                                    height={350}
+                                    width={320}
+                                />
+                            </div>
+                        )
                     )}
                     <button type='button' onClick={() => setShowEmoji(p => !p)}
                         className='bg-slate-900 hover:bg-slate-800 rounded-lg p-2.5 transition-colors border border-slate-800'>
