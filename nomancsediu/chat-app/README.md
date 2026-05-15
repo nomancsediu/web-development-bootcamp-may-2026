@@ -355,14 +355,6 @@ A **scalable** real-time chat application built with **microservices architectur
   </tr>
 </table>
 
-### Mail Service — Port 5003
-
-> Works as a **RabbitMQ consumer** — listens on `send-otp` queue and sends emails via Nodemailer (Gmail SMTP).
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check |
-
 ---
 
 ## 🚀 Installation & Local Setup
