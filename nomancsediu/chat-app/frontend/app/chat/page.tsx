@@ -351,7 +351,7 @@ const ChatApp = () => {
       <div className={`lg:ml-80 flex-1 flex flex-col h-screen overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
         {selectedUser ? (
           <>
-            <ChatHeader user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} />
+            <ChatHeader selectedUser={selectedUser} user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} />
             <ChatMessages selectedUser={selectedUser} messages={messages} loggedInUser={loggedInUser} onDeleteMessage={handleDeleteMessage} onEditStart={handleEditStart} onReact={handleReactToMessage} />
             <MessageInput selectedUser={selectedUser} message={message} setMessage={setMessage} handleMessageSend={handleMessageSend}
               onTyping={() => socket?.emit("typing", user?._id)}
