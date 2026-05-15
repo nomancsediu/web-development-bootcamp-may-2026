@@ -118,6 +118,8 @@ export const sendMessage = TryCatch(
         const {chatId,text} = req.body;
         const imageFile = req.file;
 
+        console.log('Send message request:', { senderId, chatId, text, hasFile: !!imageFile });
+
         if(!senderId){
             res.status(400).json({
                 message:"Sender id is required",
@@ -179,6 +181,13 @@ export const sendMessage = TryCatch(
         };
 
         if(imageFile){
+            console.log('Processing file upload:', { 
+                filename: imageFile.filename, 
+                path: imageFile.path,
+                mimetype: imageFile.mimetype,
+                size: imageFile.size 
+            });
+            
             const mimeType = imageFile.mimetype;
             const isImage = mimeType.startsWith('image/');
 
@@ -208,6 +217,8 @@ export const sendMessage = TryCatch(
 
         const message = new Message(messageData);
         const savedMessage = await message.save();
+
+        console.log('Message saved successfully:', savedMessage._id);
 
         let latestMessageText = text;
         if(imageFile){

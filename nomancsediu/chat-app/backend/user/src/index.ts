@@ -26,14 +26,30 @@ const corsOptions = {
         'http://localhost:8080',
         'http://103.42.5.187:8080',
         'http://103.42.5.187:5000',
-        'http://103.42.5.187:5002'
+        'http://103.42.5.187:5002',
+        'https://alapon.abdnoman.com',
+        'https://chat.abdnoman.com',
+        'https://user.abdnoman.com'
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
+    allowedHeaders: [
+        'Content-Type', 
+        'Authorization', 
+        'X-Requested-With', 
+        'Accept',
+        'Origin',
+        'Access-Control-Request-Method',
+        'Access-Control-Request-Headers'
+    ],
+    exposedHeaders: ['Content-Length', 'X-Request-Id'],
+    maxAge: 86400, // 24 hours
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
 
 app.use("/api/v1", userRoutes);
