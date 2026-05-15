@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY package*.json ./
 
-# Copy source files (make next-env.d.ts optional)
+# Copy source files
 COPY tsconfig.json next.config.ts postcss.config.mjs ./
 COPY next-env.d.ts* ./
 COPY app ./app
@@ -37,17 +37,15 @@ WORKDIR /app
 RUN apk add --no-cache wget
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
-# Copy built application
+# Copy built application with proper ownership
 COPY package*.json ./
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Change ownership
-RUN chown -R nextjs:nodejs /app
+# Switch to non-root user
 USER nextjs
 
 EXPOSE 3000

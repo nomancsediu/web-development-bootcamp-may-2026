@@ -16,16 +16,16 @@ WORKDIR /app
 RUN apk add --no-cache wget
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
-# Copy built application
+# Copy package files and install production dependencies
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
-COPY --from=builder /app/dist ./dist
 
-# Change ownership to nodejs user
-RUN chown -R nodejs:nodejs /app
+# Copy built application
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+
+# Switch to non-root user
 USER nodejs
 
 EXPOSE 5003
