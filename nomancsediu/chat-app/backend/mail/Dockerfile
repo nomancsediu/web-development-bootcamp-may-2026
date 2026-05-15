@@ -1,9 +1,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
+# Install all dependencies (including dev dependencies for building)
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Copy source and build
 COPY . .
@@ -21,7 +21,7 @@ RUN adduser -S nodejs -u 1001
 
 # Copy built application
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 
 # Change ownership to nodejs user
