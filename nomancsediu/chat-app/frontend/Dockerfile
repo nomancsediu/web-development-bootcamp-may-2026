@@ -12,8 +12,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY package*.json ./
 
-# Copy source files
-COPY tsconfig.json next.config.ts postcss.config.mjs next-env.d.ts ./
+# Copy source files (make next-env.d.ts optional)
+COPY tsconfig.json next.config.ts postcss.config.mjs ./
+COPY next-env.d.ts* ./
 COPY app ./app
 COPY components ./components
 COPY context ./context
