@@ -396,3 +396,50 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
     }
 
 });
+
+export const deleteChat = TryCatch(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?._id;
+    const { chatId } = req.params;
+
+    if (!userId) {
+        res.status(401).json({ message: "User id is required" });
+        return;
+    }
+
+    if (!chatId) {
+        res.status(400).json({ message: "Chat id is required" });
+        return;
+    }
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+        res.status(404).json({ message: "Chat not found" });
+        return;
+    }
+
+    const isUserInChat = chat.users.some(id => id.toString() === userId.toString());
+    if (!isUserInChat) {
+        res.status(403).json({ message: "You are not a member of this chat" });
+        return;
+    }
+
+    // Delete all messages in the chat
+    await Message.deleteMany({ chatId });
+    
+    // Delete the chat
+    await Chat.findByIdAndDelete(chatId);
+
+    // Notify other user via socket
+    const otherUserId = chat.users.find(id => id.toString() !== userId.toString());
+    if (otherUserId) {
+        const receiverSocketId = userSocketMap[otherUserId.toString()];
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("chatDeleted", { chatId });
+        }
+    }
+
+    res.status(200).json({ 
+        success: true,
+        message: "Chat deleted successfully" 
+    });
+});

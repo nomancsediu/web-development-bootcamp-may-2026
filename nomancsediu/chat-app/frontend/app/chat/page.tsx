@@ -289,6 +289,31 @@ const ChatApp = () => {
     }
   }
 
+  const handleDeleteChat = async (chatId: string) => {
+    const token = Cookies.get("token");
+    try {
+      await axios.delete(`${chat_service}/api/v1/chat/${chatId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Chat deleted successfully");
+      setSelectedUser(null);
+      setMessageCache(prev => {
+        const updated = { ...prev };
+        delete updated[chatId];
+        return updated;
+      });
+      setUserCache(prev => {
+        const updated = { ...prev };
+        delete updated[chatId];
+        return updated;
+      });
+      await fetchChats();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to delete chat");
+      throw error;
+    }
+  };
+
   async function createChat(u: User) {
     try {
       const token = Cookies.get("token")
@@ -311,7 +336,7 @@ const ChatApp = () => {
   }
 
   return (
-    <div className='h-screen flex bg-slate-950 text-white overflow-hidden'>
+    <div className='h-screen lg:h-screen h-[100dvh] flex bg-slate-950 text-white overflow-hidden'>
       {/* Mobile + Tablet: sidebar shown when no user selected */}
       <div className={`lg:hidden fixed inset-0 z-20 bg-slate-900 transition-transform duration-300 ${selectedUser ? '-translate-x-full' : 'translate-x-0'}`}>
         <ChatSidebar
@@ -348,17 +373,23 @@ const ChatApp = () => {
         />
       </div>
 
-      <div className={`lg:ml-80 flex-1 flex flex-col h-screen overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`lg:ml-80 flex-1 flex flex-col h-screen lg:h-screen h-[100dvh] overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
         {selectedUser ? (
           <>
-            <ChatHeader user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} />
-            <ChatMessages selectedUser={selectedUser} messages={messages} loggedInUser={loggedInUser} onDeleteMessage={handleDeleteMessage} onEditStart={handleEditStart} onReact={handleReactToMessage} />
-            <MessageInput selectedUser={selectedUser} message={message} setMessage={setMessage} handleMessageSend={handleMessageSend}
-              onTyping={() => socket?.emit("typing", user?._id)}
-              onStopTyping={() => socket?.emit("stopTyping", user?._id)}
-              editingMessage={editingMessage}
-              onCancelEdit={handleCancelEdit}
-            />
+            <div className="lg:relative fixed top-0 left-0 right-0 lg:left-auto lg:right-auto z-10">
+              <ChatHeader user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} selectedUser={selectedUser} onDeleteChat={handleDeleteChat} />
+            </div>
+            <div className="flex-1 lg:flex-1 pt-16 lg:pt-0 pb-20 lg:pb-0 overflow-hidden">
+              <ChatMessages selectedUser={selectedUser} messages={messages} loggedInUser={loggedInUser} onDeleteMessage={handleDeleteMessage} onEditStart={handleEditStart} onReact={handleReactToMessage} />
+            </div>
+            <div className="lg:relative fixed bottom-0 left-0 right-0 lg:left-auto lg:right-auto z-10">
+              <MessageInput selectedUser={selectedUser} message={message} setMessage={setMessage} handleMessageSend={handleMessageSend}
+                onTyping={() => socket?.emit("typing", user?._id)}
+                onStopTyping={() => socket?.emit("stopTyping", user?._id)}
+                editingMessage={editingMessage}
+                onCancelEdit={handleCancelEdit}
+              />
+            </div>
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center gap-4 text-center px-4">

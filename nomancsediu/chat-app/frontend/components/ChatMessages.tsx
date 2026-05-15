@@ -124,7 +124,7 @@ const ChatMessages = ({ selectedUser, messages, loggedInUser, onDeleteMessage, o
     const closeMenu = () => { setModalMessage(null); setMenuPos(null) }
 
     return (
-        <div ref={containerRef} key={selectedUser} className="relative flex-1 overflow-y-auto px-4 py-3 space-y-1 animate-fadeIn bg-slate-950">
+        <div ref={containerRef} key={selectedUser} className="h-full overflow-y-auto px-4 py-3 space-y-1 animate-fadeIn bg-slate-950 overscroll-contain">
             {!selectedUser ? (
                 <p className='text-slate-400 text-center mt-20'>Please select a user to start chatting</p>
             ) : (
