@@ -147,3 +147,31 @@ export const updateProfile = TryCatch(async(req: AuthenticatedRequest, res: Resp
 
   res.json({ message: "Profile updated successfully", token: updatedToken, user });
 });
+
+export const deleteAccount = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  // Delete user avatar from cloudinary if exists
+  if (user.avatar?.publicId) {
+    await cloudinary.uploader.destroy(user.avatar.publicId);
+  }
+
+  // Delete user account
+  await User.findByIdAndDelete(userId);
+
+  res.json({ 
+    success: true,
+    message: "Account deleted successfully" 
+  });
+});
