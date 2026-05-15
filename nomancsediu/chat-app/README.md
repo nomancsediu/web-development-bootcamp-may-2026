@@ -1,344 +1,385 @@
 <div align="center">
 
-# Real-Time Chat Application - Alapon
+# 💬 Alapon
 
-**A production-ready **microservices-based** chat platform with real-time messaging, authentication, and email notifications**
+### Real-Time Chat Application — Microservices Architecture
 
----
+<br/>
 
-## Live Demo
-
-### **[alapon.abdnoman.com](https://alapon.abdnoman.com)**
-
-[![Visit Live Site](https://img.shields.io/badge/Visit_Live_Site-alapon.abdnoman.com-FF6B6B?style=for-the-badge&labelColor=2C3E50)](https://alapon.abdnoman.com)
+[![Visit Live Site](https://img.shields.io/badge/Live_Demo-alapon.abdnoman.com-FF6B6B?style=for-the-badge&labelColor=2C3E50)](https://alapon.abdnoman.com)
 
 </div>
 
 ---
 
-## Project Overview
+## 📖 Project Overview
 
-A **scalable** real-time chat application built with **microservices architecture**, featuring **JWT authentication**, **Socket.IO** messaging, file uploads via **Cloudinary**, and asynchronous email notifications using **RabbitMQ**. Deployed on own **VPS** using **Dokploy** with **Docker** containerization.
-
----
-
-## Key Features
-
-- **Real-time messaging** with Socket.IO and typing indicators
-- **JWT authentication** with Redis session management
-- **Email verification** via RabbitMQ message queue
-- **File uploads** (images/documents) with Cloudinary
-- **User management** with profile updates and account deletion
-- **Modern UI** with Tailwind CSS and emoji support
-- **Docker containerization** for easy deployment
-- **Microservices architecture** for scalability
+A **scalable** real-time chat application built with **microservices architecture**, featuring **JWT authentication**, **Socket.IO** messaging, file uploads via **Cloudinary**, and asynchronous email notifications using **RabbitMQ**. Deployed on a self-hosted **VPS** using **Dokploy** with **Docker** containerization and **Nginx** reverse proxy.
 
 ---
 
-## Tech Stack
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| Real-time Messaging | Socket.IO-powered instant messaging with typing indicators |
+| JWT Authentication | Secure login with Redis session management |
+| Email Verification | OTP-based login via RabbitMQ message queue |
+| File Uploads | Images & documents with Cloudinary storage |
+| Message Reactions | Emoji reactions on messages |
+| Message Editing | Edit and delete messages in real-time |
+| User Management | Profile updates, avatar upload, account deletion |
+| Online Status | Real-time user presence with invisible mode |
+| Modern UI | Tailwind CSS responsive design with dark theme |
+| Docker Containerization | Multi-stage builds, non-root containers, health checks |
+
+---
+
+## 🏗️ System Architecture
+
+<p align="center">
+  <img src="readme-photos/system-architecture.png" alt="System Architecture" width="100%" />
+</p>
+
+---
+
+## 🛠️ Tech Stack
 
 <table>
   <tr>
-    <td valign="top" width="50%">
-      <h3>Frontend</h3>
-      <p>
-        <img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=flat-square&logo=next.js" alt="Next.js" />
-        <img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react" alt="React" />
-        <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript" alt="TypeScript" />
-        <img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
-        <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" alt="Socket.IO" />
-        <img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=flat-square&logo=axios" alt="Axios" />
-      </p>
+    <th colspan="2" align="center">Frontend</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=flat-square&logo=next.js" />
+      <img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react" />
+      <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript" />
+      <img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css" />
+      <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" />
+      <img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=flat-square&logo=axios" />
     </td>
-    <td valign="top" width="50%">
-      <h3>Backend Services</h3>
-      <h4>User Service</h4>
-      <p>
-        <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=node.js" alt="Node.js" />
-        <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" alt="Express" />
-        <img src="https://img.shields.io/badge/MongoDB-9.6.2-47A248?style=flat-square&logo=mongodb" alt="MongoDB" />
-        <img src="https://img.shields.io/badge/Redis-5.12.1-DC382D?style=flat-square&logo=redis" alt="Redis" />
-        <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=flat-square&logo=json-web-tokens" alt="JWT" />
-      </p>
-      <h4>Chat Service</h4>
-      <p>
-        <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" alt="Socket.IO" />
-        <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" alt="Express" />
-        <img src="https://img.shields.io/badge/Mongoose-9.6.2-47A248?style=flat-square&logo=mongodb" alt="Mongoose" />
-      </p>
-      <h4>Mail Service</h4>
-      <p>
-        <img src="https://img.shields.io/badge/Nodemailer-8.0.7-0F9DCE?style=flat-square&logo=gmail" alt="Nodemailer" />
-        <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=flat-square&logo=rabbitmq" alt="RabbitMQ" />
-      </p>
-      <h4>Infrastructure</h4>
-      <p>
-        <img src="https://img.shields.io/badge/MongoDB-6.0-47A248?style=flat-square&logo=mongodb" alt="MongoDB" />
-        <img src="https://img.shields.io/badge/Redis-7_Alpine-DC382D?style=flat-square&logo=redis" alt="Redis" />
-        <img src="https://img.shields.io/badge/RabbitMQ-3.12-FF6600?style=flat-square&logo=rabbitmq" alt="RabbitMQ" />
-        <img src="https://img.shields.io/badge/Docker-Latest-2496ED?style=flat-square&logo=docker" alt="Docker" />
-        <img src="https://img.shields.io/badge/Nginx-Latest-009639?style=flat-square&logo=nginx" alt="Nginx" />
-        <img src="https://img.shields.io/badge/Cloudflare-DNS-F38020?style=flat-square&logo=cloudflare" alt="Cloudflare" />
-        <img src="https://img.shields.io/badge/Cloudinary-Storage-3448C5?style=flat-square&logo=cloudinary" alt="Cloudinary" />
-        <img src="https://img.shields.io/badge/MongoDB_Atlas-Production-47A248?style=flat-square&logo=mongodb" alt="MongoDB Atlas" />
-      </p>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <th align="center">User Service</th>
+    <th align="center">Chat Service</th>
+    <th align="center">Mail Service</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
+      <img src="https://img.shields.io/badge/MongoDB-9.6.2-47A248?style=flat-square&logo=mongodb" /><br/>
+      <img src="https://img.shields.io/badge/Redis-5.12.1-DC382D?style=flat-square&logo=redis" /><br/>
+      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=flat-square&logo=json-web-tokens" /><br/>
+      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=flat-square&logo=rabbitmq" /><br/>
+      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=flat-square&logo=cloudinary" />
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
+      <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" /><br/>
+      <img src="https://img.shields.io/badge/Mongoose-9.6.2-47A248?style=flat-square&logo=mongodb" /><br/>
+      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=flat-square&logo=cloudinary" /><br/>
+      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=flat-square&logo=json-web-tokens" />
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
+      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=flat-square&logo=rabbitmq" /><br/>
+      <img src="https://img.shields.io/badge/Nodemailer-8.0.7-0F9DCE?style=flat-square&logo=gmail" />
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <th colspan="4" align="center">Infrastructure & DevOps</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Docker-Latest-2496ED?style=flat-square&logo=docker" /><br/><sub>Docker</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Dokploy-v0.29.4-7C3AED?style=flat-square&logo=docker" /><br/><sub>Deployment</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Nginx-Reverse_Proxy-009639?style=flat-square&logo=nginx" /><br/><sub>Reverse Proxy</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Cloudflare-DNS_&_SSL-F38020?style=flat-square&logo=cloudflare" /><br/><sub>DNS & SSL</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://img.shields.io/badge/MongoDB_Atlas-Production-47A248?style=flat-square&logo=mongodb" /><br/><sub>Database</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Upstash-Redis-DC382D?style=flat-square&logo=redis" /><br/><sub>Cache</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Cloudinary-Storage-3448C5?style=flat-square&logo=cloudinary" /><br/><sub>File Storage</sub>
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/RabbitMQ-3.12-FF6600?style=flat-square&logo=rabbitmq" /><br/><sub>Message Queue</sub>
     </td>
   </tr>
 </table>
 
 ---
 
-## System Architecture
-
-![System Architecture](readme-photos/system-architecture.png)
-
----
-
-## Screenshots
+## 📸 Screenshots
 
 <table>
   <tr>
-    <td align="center">
-      <img src="readme-photos/login-page.png" alt="Login Page" width="320" />
-      <br />
-      <strong>Login Page</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/login-page.png" alt="Login Page" width="100%" />
+      <br /><b>Login Page</b>
     </td>
-    <td align="center">
-      <img src="readme-photos/verification-page.png" alt="Verification Page" width="320" />
-      <br />
-      <strong>Verification Page</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/verification-page.png" alt="Verification Page" width="100%" />
+      <br /><b>Verification Page</b>
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <img src="readme-photos/chat-page.png" alt="Chat Interface" width="320" />
-      <br />
-      <strong>Chat Interface</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/chat-page.png" alt="Chat Interface" width="100%" />
+      <br /><b>Chat Interface</b>
     </td>
-    <td align="center">
-      <img src="readme-photos/typing.png" alt="Typing Indicator" width="320" />
-      <br />
-      <strong>Typing Indicator</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/typing.png" alt="Typing Indicator" width="100%" />
+      <br /><b>Typing Indicator</b>
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <img src="readme-photos/inbox.png" alt="Inbox" width="320" />
-      <br />
-      <strong>Inbox / Chat List</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/inbox.png" alt="Inbox / Chat List" width="100%" />
+      <br /><b>Inbox / Chat List</b>
     </td>
-    <td align="center">
-      <img src="readme-photos/file-upload.png" alt="File Upload" width="320" />
-      <br />
-      <strong>File Upload</strong>
+    <td align="center" width="50%">
+      <img src="readme-photos/file-upload.png" alt="File Upload" width="100%" />
+      <br /><b>File Upload</b>
     </td>
   </tr>
   <tr>
     <td align="center" colspan="2">
-      <img src="readme-photos/user-profile.png" alt="User Profile" width="320" />
-      <br />
-      <strong>User Profile</strong>
+      <img src="readme-photos/user-profile.png" alt="User Profile" width="50%" />
+      <br /><b>User Profile</b>
     </td>
   </tr>
 </table>
 
 ---
 
-## Authentication & Security
+## 📡 API Endpoints
 
-- **JWT tokens** with 7-day expiration
-- **Password hashing** (implementation ready)
-- **Redis session** management
-- **Email verification** with OTP
-- **CORS protection** on all services
-- **Non-root Docker** containers
-- **Environment variable** encryption
+### User Service — Port 5000
 
----
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|:----:|
+| `POST` | `/api/v1/login` | OTP login (sends email) | No |
+| `POST` | `/api/v1/verify` | Verify OTP | No |
+| `GET` | `/api/v1/me` | Get current user profile | Yes |
+| `GET` | `/api/v1/user/all` | Get all users | Yes |
+| `GET` | `/api/v1/user/:id` | Get specific user | No |
+| `PUT` | `/api/v1/user/update` | Update profile + avatar | Yes |
+| `DELETE` | `/api/v1/user/delete` | Delete account | Yes |
+| `GET` | `/health` | Health check | No |
 
-## API Endpoints
+### Chat Service — Port 5002
 
-### User Service (Port 5000)
-```
-POST   /api/v1/login           - User login
-POST   /api/v1/verify          - Verify email OTP
-GET    /api/v1/me              - Get current user profile
-GET    /api/v1/user/all        - Get all users
-GET    /api/v1/user/:id        - Get specific user
-PUT    /api/v1/user/update     - Update profile (with avatar)
-DELETE /api/v1/user/delete     - Delete account
-GET    /health                 - Health check
-```
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|:----:|
+| `POST` | `/api/v1/chat/new` | Create new chat | Yes |
+| `GET` | `/api/v1/chats/all` | Get all user chats | Yes |
+| `POST` | `/api/v1/message` | Send message (with file) | Yes |
+| `GET` | `/api/v1/message/:chatId` | Get messages + mark seen | Yes |
+| `PATCH` | `/api/v1/message/:messageId` | Edit message | Yes |
+| `PATCH` | `/api/v1/message/:messageId/react` | React with emoji | Yes |
+| `DELETE` | `/api/v1/message/:messageId` | Delete message | Yes |
+| `DELETE` | `/api/v1/chat/:chatId` | Delete entire chat | Yes |
+| `GET` | `/health` | Health check | No |
 
-### Chat Service (Port 5002)
-```
-POST   /api/v1/chat/new        - Create new chat
-GET    /api/v1/chats/all       - Get all user chats
-POST   /api/v1/message         - Send message (with file upload)
-GET    /api/v1/message/:chatId - Get messages by chat
-DELETE /api/v1/message/:messageId - Delete message
-PATCH  /api/v1/message/:messageId - Edit message
-PATCH  /api/v1/message/:messageId/react - React to message
-DELETE /api/v1/chat/:chatId    - Delete chat
-GET    /health                 - Health check
-```
+### Mail Service — Port 5003
 
-### Mail Service (Port 5003)
-```
-GET    /health                 - Health check
+> Works as a **RabbitMQ consumer** — listens on `send-otp` queue and sends emails via Nodemailer (Gmail SMTP).
 
-Note: Mail service works as RabbitMQ consumer for async email delivery
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Health check |
 
 ---
 
-## Installation & Local Setup
+## 🚀 Installation & Local Setup
 
 ### Prerequisites
-- Node.js 20+
-- Docker & Docker Compose
-- Git
+
+- **Node.js** 20+
+- **Docker** & **Docker Compose**
+- **Git**
 
 ### Steps
 
 ```bash
-# Clone repository
-git clone <your-repo-url>
-cd chat-app
+# 1. Clone the repository
+git clone https://github.com/nomancsediu/web-development-bootcamp-may-2026.git
+cd web-development-bootcamp-may-2026/nomancsediu/chat-app
 
-# Setup environment
+# 2. Setup environment
 cp .env.example .env
 # Edit .env with your credentials
 
-# Start all services
+# 3. Start all services
 docker-compose up -d
 
-# View logs
-docker-compose logs -f
-
-# Access application
-# Frontend: http://localhost:3000
-# User API: http://localhost:5000
-# Chat API: http://localhost:5002
+# 4. Access the application
+# Frontend:  http://localhost:3000
+# User API:  http://localhost:5000
+# Chat API:  http://localhost:5002
+# Mail API:  http://localhost:5003
+# RabbitMQ:  http://localhost:15672
 ```
 
 ---
 
-## Deployment Details
+## 🌍 Production Deployment
 
-**Platform:** Dokploy (VPS)  
-**Domain:** Cloudflare DNS + SSL  
-**Reverse Proxy:** Nginx
+### Architecture Overview
 
-### Production Setup
+| Component | Service | Type |
+|-----------|---------|------|
+| Database | MongoDB Atlas | External Managed |
+| Cache | Upstash Redis | External Managed |
+| Message Queue | RabbitMQ 3.12 | Self-Hosted (VPS) |
+| File Storage | Cloudinary | External Managed |
+| Email | Gmail SMTP | External |
+| Reverse Proxy | Nginx | Self-Hosted (VPS) |
+| Deployment | Dokploy | Self-Hosted (VPS) |
+| DNS & SSL | Cloudflare | External |
 
-**Self-Hosted Services (VPS):**
-- RabbitMQ 3.12 Management (Message Queue)
-- Nginx (Reverse Proxy)
-- Docker & Docker Compose
+### Deploy Steps
 
-**External Managed Services:**
-- MongoDB Atlas (Database)
-- Upstash Redis (Cache)
-- Cloudinary (File Storage)
-- Gmail SMTP (Email Delivery)
+```bash
+# 1. Deploy using production compose
+docker-compose -f docker-compose.prod.yml up -d --build
 
-### Deployment Steps
+# 2. Configure environment variables in Dokploy dashboard
 
-1. **Setup VPS:**
-   ```bash
-   # Install Docker & Docker Compose
-   # Install RabbitMQ on VPS
-   # Configure Nginx reverse proxy
-   ```
+# 3. Setup Nginx reverse proxy with SSL (Certbot)
+```
 
-2. **Deploy Services:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml up -d --build
-   ```
+### Environment Variables
 
-3. **Environment Variables:**
-   - Set in Dokploy dashboard
-   - Configure RabbitMQ connection (localhost/VPS IP)
-   - Add external service credentials
+```env
+MONGO_URI=mongodb+srv://...
+REDIS_URL=rediss://...
+RABBITMQ_URL=amqp://...
+RABBITMQ_HOST=localhost
+RABBITMQ_USERNAME=guest
+RABBITMQ_PASSWORD=guest
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+JWT_SECRET=...
+MAIL_USER=...
+MAIL_PASSWORD=...
+USER_SERVICE=http://user:5000
+NEXT_PUBLIC_USER_SERVICE=https://user.abdnoman.com
+NEXT_PUBLIC_CHAT_SERVICE=https://chat.abdnoman.com
+```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 chat-app/
 ├── backend/
-│   ├── user/              # Authentication & user management
+│   ├── user/                    # Authentication & user management
 │   │   ├── src/
+│   │   │   ├── config/          # DB, Redis, RabbitMQ, Cloudinary
+│   │   │   ├── controllers/     # User CRUD + OTP logic
+│   │   │   ├── middleware/      # Auth, Multer (avatar upload)
+│   │   │   ├── model/           # Mongoose User model
+│   │   │   └── routes/          # User API routes
 │   │   ├── Dockerfile
 │   │   └── package.json
-│   ├── chat/              # Real-time messaging
+│   ├── chat/                    # Real-time messaging
 │   │   ├── src/
+│   │   │   ├── config/          # DB, Socket.IO, Cloudinary
+│   │   │   ├── controllers/     # Chat & message logic
+│   │   │   ├── middleware/      # Auth, Multer (file upload)
+│   │   │   ├── models/          # Chat & Message models
+│   │   │   └── routes/          # Chat API routes
 │   │   ├── Dockerfile
 │   │   └── package.json
-│   └── mail/              # Email notifications
+│   └── mail/                    # Email notifications
 │       ├── src/
+│       │   ├── consumer.ts      # RabbitMQ consumer
+│       │   └── index.ts         # Express + health check
 │       ├── Dockerfile
 │       └── package.json
-├── frontend/              # Next.js application
-│   ├── app/
-│   ├── components/
-│   ├── context/
-│   └── Dockerfile
-├── readme-photos/
-├── docker-compose.yml     # Local development
-├── docker-compose.prod.yml # Production
-└── nginx.conf             # Reverse proxy config
+├── frontend/                    # Next.js application
+│   ├── app/                     # App router pages
+│   ├── components/              # React components
+│   ├── context/                 # App & Socket context
+│   ├── Dockerfile
+│   └── package.json
+├── readme-photos/               # README screenshots
+├── docker-compose.yml           # Local development
+├── docker-compose.prod.yml      # Production deployment
+├── nginx.conf                   # Reverse proxy config
+└── .env.example                 # Environment template
 ```
 
 ---
 
-## Challenges & Solutions
+## 🔒 Security Features
 
-| Challenge | Solution |
-|-----------|----------|
-| Real-time messaging across services | Implemented Socket.IO with JWT authentication |
-| Async email delivery | Used RabbitMQ message queue for decoupling |
-| File upload handling | Integrated Cloudinary with Multer middleware |
-| Service communication | Docker networking with service discovery |
-| Production deployment | Dokploy with external managed services |
-
----
-
-## Future Improvements
-
-- [ ] Add message encryption (E2E)
-- [ ] Implement group chat functionality
-- [ ] Add voice/video calling
-- [ ] Message read receipts
-- [ ] Push notifications
-- [ ] Rate limiting on APIs
-- [ ] Comprehensive test coverage
-- [ ] Message search functionality
-- [ ] User presence indicators
-- [ ] Dark mode support
+- **JWT authentication** with 15-day token expiration
+- **OTP-based login** — no password stored on server
+- **Redis session** management with 5-minute OTP expiry
+- **CORS protection** on all services with origin whitelisting
+- **Non-root Docker containers** — runs as `nodejs` user
+- **Environment variable** encryption via Dokploy
+- **Rate limiting** on OTP requests (1 per 60 seconds)
+- **Input validation** on all API endpoints
+- **File type filtering** — only allowed MIME types accepted
+- **File size limits** — 5MB for avatars, 10MB for chat files
 
 ---
 
-## License
+## 🤝 Contributing
 
-MIT License - feel free to use this project for learning and portfolio purposes.
+1. **Fork** the repository
+2. Create a **feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. Open a **Pull Request**
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — feel free to use it for learning and portfolio purposes.
 
 ---
 
 <div align="center">
 
-## Developer
+<br/>
 
-**Abdullah Al Noman**
+## 👨‍💻 Abdullah Al Noman
 
-**Email:** [abdnoman093@gmail.com](mailto:abdnoman093@gmail.com)  
-**LinkedIn:** [linkedin.com/in/nomanit](https://linkedin.com/in/nomanit)  
-**Portfolio:** [abdnoman.com](https://abdnoman.com)
+<br/>
 
----
+[![Email](https://img.shields.io/badge/Email-abdnoman093@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:abdnoman093@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-nomanit-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/nomanit)
 
-**Star this repo if you find it helpful!**
+[![Portfolio](https://img.shields.io/badge/Portfolio-abdnoman.com-FF6B6B?style=for-the-badge&logo=google-chrome&logoColor=white)](https://abdnoman.com)
+[![GitHub](https://img.shields.io/badge/GitHub-nomancsediu-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nomancsediu)
+
+<br/>
+
+⭐ **Star this repo if you find it helpful!** ⭐
 
 </div>
