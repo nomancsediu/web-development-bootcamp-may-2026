@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   mongodb:
     image: mongo:6.0
@@ -60,9 +58,11 @@ services:
     environment:
       - PORT=5002
       - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
       - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
       - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - USER_SERVICE=${USER_SERVICE}
     depends_on:
       - mongodb
 
