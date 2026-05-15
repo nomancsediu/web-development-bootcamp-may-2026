@@ -79,25 +79,29 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 🛠️ Tech Stack
 
-<table width="100%" align="center">
-  <tr>
-    <th colspan="6" align="center">Frontend</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js" /></td>
-    <td align="center"><img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react" /></td>
-    <td align="center"><img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript" /></td>
-    <td align="center"><img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=for-the-badge&logo=tailwind-css" /></td>
-    <td align="center"><img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=for-the-badge&logo=socket.io" /></td>
-    <td align="center"><img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=for-the-badge&logo=axios" /></td>
-  </tr>
-</table>
+
+### Frontend
 
 <table width="100%" align="center">
   <tr>
-    <th align="center">User Service</th>
-    <th align="center">Chat Service</th>
-    <th align="center">Mail Service</th>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js" /></td>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react" /></td>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=for-the-badge&logo=tailwind-css" /></td>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=for-the-badge&logo=socket.io" /></td>
+    <td align="center" width="33%"><img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=for-the-badge&logo=axios" /></td>
+  </tr>
+</table>
+
+### Backend Services
+
+<table width="100%" align="center">
+  <tr>
+    <th align="center">👤 User Service</th>
+    <th align="center">💬 Chat Service</th>
+    <th align="center">📧 Mail Service</th>
   </tr>
   <tr>
     <td align="center">
@@ -123,35 +127,37 @@ A **scalable** real-time chat application built with **microservices architectur
   </tr>
 </table>
 
+### Infrastructure & DevOps
+
 <table width="100%" align="center">
   <tr>
     <th colspan="4" align="center">Infrastructure & DevOps</th>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Docker-Latest-2496ED?style=for-the-badge&logo=docker" /><br/><sub>Docker</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Dokploy-v0.29.4-7C3AED?style=for-the-badge&logo=docker" /><br/><sub>Deployment</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Nginx-Reverse_Proxy-009639?style=for-the-badge&logo=nginx" /><br/><sub>Reverse Proxy</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Cloudflare-DNS_&_SSL-F38020?style=for-the-badge&logo=cloudflare" /><br/><sub>DNS & SSL</sub>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/MongoDB_Atlas-Production-47A248?style=for-the-badge&logo=mongodb" /><br/><sub>Database</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Upstash-Redis-DC382D?style=for-the-badge&logo=redis" /><br/><sub>Cache</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/Cloudinary-Storage-3448C5?style=for-the-badge&logo=cloudinary" /><br/><sub>File Storage</sub>
     </td>
-    <td align="center">
+    <td align="center" width="25%">
       <img src="https://img.shields.io/badge/RabbitMQ-3.12-FF6600?style=for-the-badge&logo=rabbitmq" /><br/><sub>Message Queue</sub>
     </td>
   </tr>
@@ -204,16 +210,10 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 📡 API Endpoints
 
-<table width="100%" align="center">
+<p align="center"><b>👤 User Service — Port 5000</b></p>
+
+<table width="80%" align="center">
   <tr>
-    <th colspan="4" align="center">User Service — Port 5000</th>
-    <th colspan="4" align="center">Chat Service — Port 5002</th>
-  </tr>
-  <tr>
-    <th align="center">Method</th>
-    <th align="left">Endpoint</th>
-    <th align="left">Description</th>
-    <th align="center">Auth</th>
     <th align="center">Method</th>
     <th align="left">Endpoint</th>
     <th align="left">Description</th>
@@ -224,29 +224,17 @@ A **scalable** real-time chat application built with **microservices architectur
     <td><code>/api/v1/login</code></td>
     <td>OTP login (sends email)</td>
     <td align="center">No</td>
-    <td align="center"><code>POST</code></td>
-    <td><code>/api/v1/chat/new</code></td>
-    <td>Create new chat</td>
-    <td align="center">Yes</td>
   </tr>
   <tr>
     <td align="center"><code>POST</code></td>
     <td><code>/api/v1/verify</code></td>
     <td>Verify OTP</td>
     <td align="center">No</td>
-    <td align="center"><code>GET</code></td>
-    <td><code>/api/v1/chats/all</code></td>
-    <td>Get all user chats</td>
-    <td align="center">Yes</td>
   </tr>
   <tr>
     <td align="center"><code>GET</code></td>
     <td><code>/api/v1/me</code></td>
     <td>Get current user profile</td>
-    <td align="center">Yes</td>
-    <td align="center"><code>POST</code></td>
-    <td><code>/api/v1/message</code></td>
-    <td>Send message (with file)</td>
     <td align="center">Yes</td>
   </tr>
   <tr>
@@ -254,29 +242,17 @@ A **scalable** real-time chat application built with **microservices architectur
     <td><code>/api/v1/user/all</code></td>
     <td>Get all users</td>
     <td align="center">Yes</td>
-    <td align="center"><code>GET</code></td>
-    <td><code>/api/v1/message/:chatId</code></td>
-    <td>Get messages + mark seen</td>
-    <td align="center">Yes</td>
   </tr>
   <tr>
     <td align="center"><code>GET</code></td>
     <td><code>/api/v1/user/:id</code></td>
     <td>Get specific user</td>
     <td align="center">No</td>
-    <td align="center"><code>PATCH</code></td>
-    <td><code>/api/v1/message/:messageId</code></td>
-    <td>Edit message</td>
-    <td align="center">Yes</td>
   </tr>
   <tr>
     <td align="center"><code>PUT</code></td>
     <td><code>/api/v1/user/update</code></td>
     <td>Update profile + avatar</td>
-    <td align="center">Yes</td>
-    <td align="center"><code>PATCH</code></td>
-    <td><code>/api/v1/message/:messageId/react</code></td>
-    <td>React with emoji</td>
     <td align="center">Yes</td>
   </tr>
   <tr>
@@ -284,27 +260,98 @@ A **scalable** real-time chat application built with **microservices architectur
     <td><code>/api/v1/user/delete</code></td>
     <td>Delete account</td>
     <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/health</code></td>
+    <td>Health check</td>
+    <td align="center">No</td>
+  </tr>
+</table>
+
+<br/>
+
+<p align="center"><b>💬 Chat Service — Port 5002</b></p>
+
+<table width="80%" align="center">
+  <tr>
+    <th align="center">Method</th>
+    <th align="left">Endpoint</th>
+    <th align="left">Description</th>
+    <th align="center">Auth</th>
+  </tr>
+  <tr>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/chat/new</code></td>
+    <td>Create new chat</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/chats/all</code></td>
+    <td>Get all user chats</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/message</code></td>
+    <td>Send message (with file)</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/message/:chatId</code></td>
+    <td>Get messages + mark seen</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>PATCH</code></td>
+    <td><code>/api/v1/message/:messageId</code></td>
+    <td>Edit message</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>PATCH</code></td>
+    <td><code>/api/v1/message/:messageId/react</code></td>
+    <td>React with emoji</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
     <td align="center"><code>DELETE</code></td>
     <td><code>/api/v1/message/:messageId</code></td>
     <td>Delete message</td>
     <td align="center">Yes</td>
   </tr>
   <tr>
-    <td align="center"><code>GET</code></td>
-    <td><code>/health</code></td>
-    <td>Health check</td>
-    <td align="center">No</td>
     <td align="center"><code>DELETE</code></td>
     <td><code>/api/v1/chat/:chatId</code></td>
     <td>Delete entire chat</td>
     <td align="center">Yes</td>
   </tr>
   <tr>
-    <td></td><td></td><td></td><td></td>
     <td align="center"><code>GET</code></td>
     <td><code>/health</code></td>
     <td>Health check</td>
     <td align="center">No</td>
+  </tr>
+</table>
+
+<br/>
+
+<p align="center"><b>📧 Mail Service — Port 5003</b></p>
+
+> <p align="center">Works as a <b>RabbitMQ consumer</b> — listens on <code>send-otp</code> queue and sends emails via Nodemailer (Gmail SMTP).</p>
+
+<table width="80%" align="center">
+  <tr>
+    <th align="center">Method</th>
+    <th align="left">Endpoint</th>
+    <th align="left">Description</th>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/health</code></td>
+    <td>Health check</td>
   </tr>
 </table>
 
