@@ -20,18 +20,52 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## ✨ Key Features
 
-| Feature | Description |
-|---------|-------------|
-| Real-time Messaging | Socket.IO-powered instant messaging with typing indicators |
-| JWT Authentication | Secure login with Redis session management |
-| Email Verification | OTP-based login via RabbitMQ message queue |
-| File Uploads | Images & documents with Cloudinary storage |
-| Message Reactions | Emoji reactions on messages |
-| Message Editing | Edit and delete messages in real-time |
-| User Management | Profile updates, avatar upload, account deletion |
-| Online Status | Real-time user presence with invisible mode |
-| Modern UI | Tailwind CSS responsive design with dark theme |
-| Docker Containerization | Multi-stage builds, non-root containers, health checks |
+<table width="100%" align="center">
+  <tr>
+    <th width="30%" align="left">Feature</th>
+    <th align="left">Description</th>
+  </tr>
+  <tr>
+    <td><b>Real-time Messaging</b></td>
+    <td>Socket.IO-powered instant messaging with typing indicators</td>
+  </tr>
+  <tr>
+    <td><b>JWT Authentication</b></td>
+    <td>Secure login with Redis session management</td>
+  </tr>
+  <tr>
+    <td><b>Email Verification</b></td>
+    <td>OTP-based login via RabbitMQ message queue</td>
+  </tr>
+  <tr>
+    <td><b>File Uploads</b></td>
+    <td>Images & documents with Cloudinary storage</td>
+  </tr>
+  <tr>
+    <td><b>Message Reactions</b></td>
+    <td>Emoji reactions on messages</td>
+  </tr>
+  <tr>
+    <td><b>Message Editing</b></td>
+    <td>Edit and delete messages in real-time</td>
+  </tr>
+  <tr>
+    <td><b>User Management</b></td>
+    <td>Profile updates, avatar upload, account deletion</td>
+  </tr>
+  <tr>
+    <td><b>Online Status</b></td>
+    <td>Real-time user presence with invisible mode</td>
+  </tr>
+  <tr>
+    <td><b>Modern UI</b></td>
+    <td>Tailwind CSS responsive design with dark theme</td>
+  </tr>
+  <tr>
+    <td><b>Docker Containerization</b></td>
+    <td>Multi-stage builds, non-root containers, health checks</td>
+  </tr>
+</table>
 
 ---
 
@@ -45,23 +79,21 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 🛠️ Tech Stack
 
-<table width="100%">
+<table width="100%" align="center">
   <tr>
-    <th colspan="2" align="center">Frontend</th>
+    <th colspan="6" align="center">Frontend</th>
   </tr>
   <tr>
-    <td align="center">
-      <img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=flat-square&logo=next.js" />
-      <img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react" />
-      <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript" />
-      <img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css" />
-      <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" />
-      <img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=flat-square&logo=axios" />
-    </td>
+    <td align="center"><img src="https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js" /></td>
+    <td align="center"><img src="https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react" /></td>
+    <td align="center"><img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript" /></td>
+    <td align="center"><img src="https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=for-the-badge&logo=tailwind-css" /></td>
+    <td align="center"><img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=for-the-badge&logo=socket.io" /></td>
+    <td align="center"><img src="https://img.shields.io/badge/Axios-1.16.0-5A29E4?style=for-the-badge&logo=axios" /></td>
   </tr>
 </table>
 
-<table width="100%">
+<table width="100%" align="center">
   <tr>
     <th align="center">User Service</th>
     <th align="center">Chat Service</th>
@@ -69,58 +101,58 @@ A **scalable** real-time chat application built with **microservices architectur
   </tr>
   <tr>
     <td align="center">
-      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
-      <img src="https://img.shields.io/badge/MongoDB-9.6.2-47A248?style=flat-square&logo=mongodb" /><br/>
-      <img src="https://img.shields.io/badge/Redis-5.12.1-DC382D?style=flat-square&logo=redis" /><br/>
-      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=flat-square&logo=json-web-tokens" /><br/>
-      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=flat-square&logo=rabbitmq" /><br/>
-      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=flat-square&logo=cloudinary" />
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=for-the-badge&logo=express" /><br/><br/>
+      <img src="https://img.shields.io/badge/MongoDB-9.6.2-47A248?style=for-the-badge&logo=mongodb" /><br/><br/>
+      <img src="https://img.shields.io/badge/Redis-5.12.1-DC382D?style=for-the-badge&logo=redis" /><br/><br/>
+      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=for-the-badge&logo=json-web-tokens" /><br/><br/>
+      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=for-the-badge&logo=rabbitmq" /><br/><br/>
+      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=for-the-badge&logo=cloudinary" />
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
-      <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=flat-square&logo=socket.io" /><br/>
-      <img src="https://img.shields.io/badge/Mongoose-9.6.2-47A248?style=flat-square&logo=mongodb" /><br/>
-      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=flat-square&logo=cloudinary" /><br/>
-      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=flat-square&logo=json-web-tokens" />
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=for-the-badge&logo=express" /><br/><br/>
+      <img src="https://img.shields.io/badge/Socket.IO-4.8.3-010101?style=for-the-badge&logo=socket.io" /><br/><br/>
+      <img src="https://img.shields.io/badge/Mongoose-9.6.2-47A248?style=for-the-badge&logo=mongodb" /><br/><br/>
+      <img src="https://img.shields.io/badge/Cloudinary-1.41.3-3448C5?style=for-the-badge&logo=cloudinary" /><br/><br/>
+      <img src="https://img.shields.io/badge/JWT-9.0.3-000000?style=for-the-badge&logo=json-web-tokens" />
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express" /><br/>
-      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=flat-square&logo=rabbitmq" /><br/>
-      <img src="https://img.shields.io/badge/Nodemailer-8.0.7-0F9DCE?style=flat-square&logo=gmail" />
+      <img src="https://img.shields.io/badge/Express-5.2.1-000000?style=for-the-badge&logo=express" /><br/><br/>
+      <img src="https://img.shields.io/badge/RabbitMQ-2.0.1-FF6600?style=for-the-badge&logo=rabbitmq" /><br/><br/>
+      <img src="https://img.shields.io/badge/Nodemailer-8.0.7-0F9DCE?style=for-the-badge&logo=gmail" />
     </td>
   </tr>
 </table>
 
-<table width="100%">
+<table width="100%" align="center">
   <tr>
     <th colspan="4" align="center">Infrastructure & DevOps</th>
   </tr>
   <tr>
     <td align="center">
-      <img src="https://img.shields.io/badge/Docker-Latest-2496ED?style=flat-square&logo=docker" /><br/><sub>Docker</sub>
+      <img src="https://img.shields.io/badge/Docker-Latest-2496ED?style=for-the-badge&logo=docker" /><br/><sub>Docker</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Dokploy-v0.29.4-7C3AED?style=flat-square&logo=docker" /><br/><sub>Deployment</sub>
+      <img src="https://img.shields.io/badge/Dokploy-v0.29.4-7C3AED?style=for-the-badge&logo=docker" /><br/><sub>Deployment</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Nginx-Reverse_Proxy-009639?style=flat-square&logo=nginx" /><br/><sub>Reverse Proxy</sub>
+      <img src="https://img.shields.io/badge/Nginx-Reverse_Proxy-009639?style=for-the-badge&logo=nginx" /><br/><sub>Reverse Proxy</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Cloudflare-DNS_&_SSL-F38020?style=flat-square&logo=cloudflare" /><br/><sub>DNS & SSL</sub>
+      <img src="https://img.shields.io/badge/Cloudflare-DNS_&_SSL-F38020?style=for-the-badge&logo=cloudflare" /><br/><sub>DNS & SSL</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="https://img.shields.io/badge/MongoDB_Atlas-Production-47A248?style=flat-square&logo=mongodb" /><br/><sub>Database</sub>
+      <img src="https://img.shields.io/badge/MongoDB_Atlas-Production-47A248?style=for-the-badge&logo=mongodb" /><br/><sub>Database</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Upstash-Redis-DC382D?style=flat-square&logo=redis" /><br/><sub>Cache</sub>
+      <img src="https://img.shields.io/badge/Upstash-Redis-DC382D?style=for-the-badge&logo=redis" /><br/><sub>Cache</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/Cloudinary-Storage-3448C5?style=flat-square&logo=cloudinary" /><br/><sub>File Storage</sub>
+      <img src="https://img.shields.io/badge/Cloudinary-Storage-3448C5?style=for-the-badge&logo=cloudinary" /><br/><sub>File Storage</sub>
     </td>
     <td align="center">
-      <img src="https://img.shields.io/badge/RabbitMQ-3.12-FF6600?style=flat-square&logo=rabbitmq" /><br/><sub>Message Queue</sub>
+      <img src="https://img.shields.io/badge/RabbitMQ-3.12-FF6600?style=for-the-badge&logo=rabbitmq" /><br/><sub>Message Queue</sub>
     </td>
   </tr>
 </table>
@@ -129,7 +161,7 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 📸 Screenshots
 
-<table width="100%">
+<table width="100%" align="center">
   <tr>
     <td align="center" width="50%">
       <img src="readme-photos/login-page.png" alt="Login Page" width="100%" />
@@ -172,32 +204,109 @@ A **scalable** real-time chat application built with **microservices architectur
 
 ## 📡 API Endpoints
 
-### User Service — Port 5000
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `POST` | `/api/v1/login` | OTP login (sends email) | No |
-| `POST` | `/api/v1/verify` | Verify OTP | No |
-| `GET` | `/api/v1/me` | Get current user profile | Yes |
-| `GET` | `/api/v1/user/all` | Get all users | Yes |
-| `GET` | `/api/v1/user/:id` | Get specific user | No |
-| `PUT` | `/api/v1/user/update` | Update profile + avatar | Yes |
-| `DELETE` | `/api/v1/user/delete` | Delete account | Yes |
-| `GET` | `/health` | Health check | No |
-
-### Chat Service — Port 5002
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `POST` | `/api/v1/chat/new` | Create new chat | Yes |
-| `GET` | `/api/v1/chats/all` | Get all user chats | Yes |
-| `POST` | `/api/v1/message` | Send message (with file) | Yes |
-| `GET` | `/api/v1/message/:chatId` | Get messages + mark seen | Yes |
-| `PATCH` | `/api/v1/message/:messageId` | Edit message | Yes |
-| `PATCH` | `/api/v1/message/:messageId/react` | React with emoji | Yes |
-| `DELETE` | `/api/v1/message/:messageId` | Delete message | Yes |
-| `DELETE` | `/api/v1/chat/:chatId` | Delete entire chat | Yes |
-| `GET` | `/health` | Health check | No |
+<table width="100%" align="center">
+  <tr>
+    <th colspan="4" align="center">User Service — Port 5000</th>
+    <th colspan="4" align="center">Chat Service — Port 5002</th>
+  </tr>
+  <tr>
+    <th align="center">Method</th>
+    <th align="left">Endpoint</th>
+    <th align="left">Description</th>
+    <th align="center">Auth</th>
+    <th align="center">Method</th>
+    <th align="left">Endpoint</th>
+    <th align="left">Description</th>
+    <th align="center">Auth</th>
+  </tr>
+  <tr>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/login</code></td>
+    <td>OTP login (sends email)</td>
+    <td align="center">No</td>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/chat/new</code></td>
+    <td>Create new chat</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/verify</code></td>
+    <td>Verify OTP</td>
+    <td align="center">No</td>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/chats/all</code></td>
+    <td>Get all user chats</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/me</code></td>
+    <td>Get current user profile</td>
+    <td align="center">Yes</td>
+    <td align="center"><code>POST</code></td>
+    <td><code>/api/v1/message</code></td>
+    <td>Send message (with file)</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/user/all</code></td>
+    <td>Get all users</td>
+    <td align="center">Yes</td>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/message/:chatId</code></td>
+    <td>Get messages + mark seen</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/api/v1/user/:id</code></td>
+    <td>Get specific user</td>
+    <td align="center">No</td>
+    <td align="center"><code>PATCH</code></td>
+    <td><code>/api/v1/message/:messageId</code></td>
+    <td>Edit message</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>PUT</code></td>
+    <td><code>/api/v1/user/update</code></td>
+    <td>Update profile + avatar</td>
+    <td align="center">Yes</td>
+    <td align="center"><code>PATCH</code></td>
+    <td><code>/api/v1/message/:messageId/react</code></td>
+    <td>React with emoji</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>DELETE</code></td>
+    <td><code>/api/v1/user/delete</code></td>
+    <td>Delete account</td>
+    <td align="center">Yes</td>
+    <td align="center"><code>DELETE</code></td>
+    <td><code>/api/v1/message/:messageId</code></td>
+    <td>Delete message</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td align="center"><code>GET</code></td>
+    <td><code>/health</code></td>
+    <td>Health check</td>
+    <td align="center">No</td>
+    <td align="center"><code>DELETE</code></td>
+    <td><code>/api/v1/chat/:chatId</code></td>
+    <td>Delete entire chat</td>
+    <td align="center">Yes</td>
+  </tr>
+  <tr>
+    <td></td><td></td><td></td><td></td>
+    <td align="center"><code>GET</code></td>
+    <td><code>/health</code></td>
+    <td>Health check</td>
+    <td align="center">No</td>
+  </tr>
+</table>
 
 ### Mail Service — Port 5003
 
@@ -245,16 +354,53 @@ docker-compose up -d
 
 ### Architecture Overview
 
-| Component | Service | Type |
-|-----------|---------|------|
-| Database | MongoDB Atlas | External Managed |
-| Cache | Upstash Redis | External Managed |
-| Message Queue | RabbitMQ 3.12 | Self-Hosted (VPS) |
-| File Storage | Cloudinary | External Managed |
-| Email | Gmail SMTP | External |
-| Reverse Proxy | Nginx | Self-Hosted (VPS) |
-| Deployment | Dokploy | Self-Hosted (VPS) |
-| DNS & SSL | Cloudflare | External |
+<table width="80%" align="center">
+  <tr>
+    <th align="center">Component</th>
+    <th align="center">Service</th>
+    <th align="center">Type</th>
+  </tr>
+  <tr>
+    <td align="center">Database</td>
+    <td align="center">MongoDB Atlas</td>
+    <td align="center">External Managed</td>
+  </tr>
+  <tr>
+    <td align="center">Cache</td>
+    <td align="center">Upstash Redis</td>
+    <td align="center">External Managed</td>
+  </tr>
+  <tr>
+    <td align="center">Message Queue</td>
+    <td align="center">RabbitMQ 3.12</td>
+    <td align="center">Self-Hosted (VPS)</td>
+  </tr>
+  <tr>
+    <td align="center">File Storage</td>
+    <td align="center">Cloudinary</td>
+    <td align="center">External Managed</td>
+  </tr>
+  <tr>
+    <td align="center">Email</td>
+    <td align="center">Gmail SMTP</td>
+    <td align="center">External</td>
+  </tr>
+  <tr>
+    <td align="center">Reverse Proxy</td>
+    <td align="center">Nginx</td>
+    <td align="center">Self-Hosted (VPS)</td>
+  </tr>
+  <tr>
+    <td align="center">Deployment</td>
+    <td align="center">Dokploy</td>
+    <td align="center">Self-Hosted (VPS)</td>
+  </tr>
+  <tr>
+    <td align="center">DNS & SSL</td>
+    <td align="center">Cloudflare</td>
+    <td align="center">External</td>
+  </tr>
+</table>
 
 ### Deploy Steps
 
