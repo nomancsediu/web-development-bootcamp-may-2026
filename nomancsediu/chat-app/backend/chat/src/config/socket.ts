@@ -3,6 +3,8 @@ import http from 'http';
 import express from 'express';
 import axios from 'axios';
 
+const userServiceBase = process.env.USER_SERVICE || 'http://user:5000';
+
 const app = express()
 const server = http.createServer(app);
 const io = new Server(server,{
@@ -18,7 +20,7 @@ io.on("connection", async (socket:Socket) => {
 
     if(userId && userId!="undefined") {
         try {
-            const { data } = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${userId}`);
+            const { data } = await axios.get(`${userServiceBase}/api/v1/user/${userId}`);
             if (!data?.user?.isInvisible) {
                 userSocketMap[userId] = socket.id;
                 console.log(`User ${userId} mapped to socket ${socket.id}`);

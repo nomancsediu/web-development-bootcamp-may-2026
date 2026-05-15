@@ -13,6 +13,15 @@ connectDb();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use('/api/v1', chatRoutes);
+
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error('Chat service error handler:', err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
+});
+
 const PORT = process.env.PORT;
 
 server.listen(PORT, () => {

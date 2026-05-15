@@ -1,5 +1,8 @@
 const TryCatch = (func: Function) => (req: any, res: any, next: any) => {
-    Promise.resolve(func(req, res, next)).catch(next);
+    Promise.resolve(func(req, res, next)).catch((error) => {
+        console.error("Unhandled chat route error:", error);
+        next(error);
+    });
 };
 
 

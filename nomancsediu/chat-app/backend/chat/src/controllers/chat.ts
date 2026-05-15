@@ -6,6 +6,8 @@ import { Message } from "../models/Messages.js";
 import axios from "axios";
 import { io, userSocketMap } from "../config/socket.js";
 
+const userServiceBase = process.env.USER_SERVICE || 'http://user:5000';
+
 export const createNewChat = TryCatch(
     async (req: AuthenticatedRequest, res: Response) => {
         const userId = req.user?._id;
@@ -73,8 +75,7 @@ export const getAllChats = TryCatch(
 
                 try {
 
-                    const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`
-                    );
+                    const {data} = await axios.get(`${userServiceBase}/api/v1/user/${otherUserId}`);
 
                     return {
                         user: data.user,
@@ -368,7 +369,7 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
     const otherUserId = chat.users.find((id) => id!== userId);
 
     try {
-    const {data} = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`);
+    const {data} = await axios.get(`${userServiceBase}/api/v1/user/${otherUserId}`);
        
     
     if(!otherUserId){
