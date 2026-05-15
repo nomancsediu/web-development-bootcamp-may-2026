@@ -87,7 +87,7 @@ const MessageInput = ({ selectedUser, message, setMessage, handleMessageSend, on
 
                 <div ref={emojiRef} className="relative flex-shrink-0">
                     {showEmoji && (
-                        <div className="absolute bottom-14 right-0 z-50">
+                        <div className="absolute bottom-14 left-0 z-50">
                             <EmojiPicker
                                 theme={Theme.DARK}
                                 onEmojiClick={(emojiData: EmojiClickData) => setMessage(message + emojiData.emoji)}
