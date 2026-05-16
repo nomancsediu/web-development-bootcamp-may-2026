@@ -1,5 +1,5 @@
 import TryCatch from "../config/TryCatch.js"
-import type { Response } from "express"
+import type { Request, Response } from "express"
 import type { AuthenticatedRequest } from "../middleware/isAuth.js"
 import { Chat } from "../models/Chat.js";
 import { Message } from "../models/Messages.js";
@@ -20,7 +20,6 @@ export const createNewChat = TryCatch(
             });
             return;
         }
-
 
         const existingChat = await Chat.findOne({
             users: {$all: [userId, otherUserId], $size: 2},
@@ -172,7 +171,6 @@ export const sendMessage = TryCatch(
             return; 
         }
 
-
         let messageData: any = {
             chatId: chatId,
             sender: senderId,
@@ -230,13 +228,9 @@ export const sendMessage = TryCatch(
             latestMessage: {
                 text: latestMessageText,
                 sender: senderId,
-
             },
             updatedAt: new Date(),
-
-        
         }, {new: true});
-
 
         //emit socket event to other user in chat
         const receiverSocketId = userSocketMap[otherUserId.toString()];
@@ -346,12 +340,14 @@ export const reactToMessage = TryCatch(async (req: AuthenticatedRequest, res: Re
 export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res: Response)=>{
    const userId = req.user?._id;
    const {chatId} = req.params;
+
     if(!userId){
         res.status(401).json({
             message:"User id is required",
         });
         return;
     }
+
     if(!chatId){
         res.status(400).json({
             message:"Chat id is required",
@@ -392,7 +388,6 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
         if (senderSocketId) io.to(senderSocketId).emit("messagesSeen", { chatId });
     }
 
-
     const messages = await Message.find({chatId}).sort({createdAt: 1});
 
     const otherUserId = chat.users.find((id) => id!== userId);
@@ -400,7 +395,6 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
     try {
     const {data} = await axios.get(`${userServiceBase}/api/v1/user/${otherUserId}`);
        
-    
     if(!otherUserId){
         res.status(400).json({
             message:"Other user not found",
@@ -412,7 +406,6 @@ export const getMessagesByChat = TryCatch(async (req: AuthenticatedRequest, res:
         messages,
         user: data.user,
     });
-
 
     } 
     
@@ -470,5 +463,89 @@ export const deleteChat = TryCatch(async (req: AuthenticatedRequest, res: Respon
     res.status(200).json({ 
         success: true,
         message: "Chat deleted successfully" 
+    });
+});
+
+//Alapon Assistant Welcome 
+export const assistantWelcome = TryCatch(async (req: Request, res: Response) => {
+    const { userId, assistantId } = req.body;
+
+    if (!userId || !assistantId) {
+        res.status(400).json({ message: "userId and assistantId are required" });
+        return;
+    }
+
+    // Check if chat already exists
+    let chat = await Chat.findOne({
+        users: { $all: [userId, assistantId], $size: 2 },
+    });
+
+    if (!chat) {
+        chat = await Chat.create({
+            users: [userId, assistantId],
+        });
+    }
+
+    // Check if welcome message already sent
+    const existingWelcome = await Message.findOne({
+        chatId: chat._id,
+        sender: assistantId,
+    });
+
+    if (!existingWelcome) {
+const welcomeMessages = [
+    "Welcome to Alapon! Start chatting with anyone instantly.",
+    "Search for users and begin a conversation. Send text, images, or files.",
+    "You can edit, delete, and react to messages. You will also see when your messages are read.",
+    "Go to Settings to update your profile, change your name, or go invisible.",
+];
+
+        let lastMessage = null;
+
+        for (let i = 0; i < welcomeMessages.length; i++) {
+            const message = await Message.create({
+                chatId: chat._id,
+                sender: assistantId,
+                text: welcomeMessages[i],
+                messageType: "text",
+                seen: false,
+            });
+
+            lastMessage = message;
+
+            // Small delay between messages for realistic feel
+            if (i < welcomeMessages.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+
+        // Update chat's latest message with the last one
+        if (lastMessage) {
+            await Chat.findByIdAndUpdate(chat._id, {
+                latestMessage: {
+                    text: lastMessage.text,
+                    sender: assistantId,
+                },
+                updatedAt: new Date(),
+            });
+        }
+
+        // Emit socket events for each message
+        const receiverSocketId = userSocketMap[userId.toString()];
+        if (receiverSocketId) {
+            const allMessages = await Message.find({
+                chatId: chat._id,
+                sender: assistantId,
+            }).sort({ createdAt: 1 });
+
+            for (const msg of allMessages) {
+                io.to(receiverSocketId).emit("newMessage", msg);
+            }
+        }
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Welcome messages processed",
     });
 });
