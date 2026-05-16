@@ -7,6 +7,7 @@
 <br/>
 
 [![Visit Live Site](https://img.shields.io/badge/Live_Demo-alapon.abdnoman.com-FF6B6B?style=for-the-badge&labelColor=2C3E50)](https://alapon.abdnoman.com)
+[![Demo Video](https://img.shields.io/badge/Demo_Video-Watch_Now-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=2C3E50)](https://youtu.be/b2izeC1h47E)
 
 </div>
 
