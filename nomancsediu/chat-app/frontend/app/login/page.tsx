@@ -81,7 +81,7 @@ const LoginPage = () => {
                         Welcome to Alapon
                     </h1>
                     <p className='text-gray-400 text-sm sm:text-lg'>
-                        Enter your email to continue your journey
+                        Enter your email to connect and chat
                     </p>
                 </div>
 
