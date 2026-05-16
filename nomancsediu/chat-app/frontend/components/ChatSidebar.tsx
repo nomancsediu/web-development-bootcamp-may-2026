@@ -30,10 +30,9 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 bg-black/50 z-10" onClick={() => setSidebarOpen(false)} />
       )}
-      <aside className={`fixed z-20 top-0 left-0 h-screen lg:h-screen h-[100dvh]
-        w-full lg:w-80 bg-slate-900 border-r border-slate-800 transform
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300
-        flex flex-col`}>
+<aside className={`lg:fixed z-20 top-0 left-0 h-full lg:h-dvh w-full lg:w-80 bg-slate-900 border-r border-slate-800 transform
+  ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300
+  flex flex-col`}>
 
         {/* Header */}
         <div className='px-4 py-4 border-b border-slate-800'>
@@ -65,7 +64,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
         </div>
 
         {/* Content */}
-        <div className='flex-1 overflow-y-auto px-3 py-2 min-h-0 pb-20 lg:pb-2 overscroll-contain'>
+        <div className='flex-1 overflow-y-auto px-3 py-2 min-h-0 overscroll-contain'>
           {showAllUser ? (
             <div className='space-y-1'>
               {!searchQuery.trim() ? (
@@ -159,7 +158,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
         </div>
 
         {/* Footer */}
-        <div className='lg:relative fixed bottom-0 left-0 right-0 lg:left-auto lg:right-auto p-3 border-t border-slate-800 flex gap-2 bg-slate-900'>
+        <div className='p-3 border-t border-slate-800 flex gap-2 bg-slate-900 flex-shrink-0'>
           <Link href='/settings' className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 transition-colors flex-1 border border-slate-800'>
             <Settings className='w-4 h-4 text-slate-300' />
             <span className='text-sm text-slate-300 font-medium'>Settings</span>
