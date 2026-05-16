@@ -28,7 +28,7 @@ const ChatSidebar = ({ sidebarOpen, setSidebarOpen, showAllUser,
   return (
     <>
       {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black/50 z-10" onClick={() => setSidebarOpen(false)} />
+        <div className="hidden lg:block fixed inset-0 bg-black/50 z-10" onClick={() => setSidebarOpen(false)} />
       )}
 <aside className={`lg:fixed z-20 top-0 left-0 h-full lg:h-dvh w-full lg:w-80 bg-slate-900 border-r border-slate-800 transform
   ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300
