@@ -14,7 +14,7 @@
 
 ## 📖 Project Overview
 
-A **scalable** real-time chat application built with **microservices architecture**, featuring **JWT authentication**, **Socket.IO** messaging, file uploads via **Cloudinary**, and asynchronous email notifications using **RabbitMQ**. Deployed on a self-hosted **VPS** using **Dokploy** with **Docker** containerization and **Nginx** reverse proxy.
+A real-time chat application built with **microservices architecture**, featuring **JWT authentication**, **Socket.IO** messaging, file uploads via **Cloudinary**, and asynchronous email notifications using **RabbitMQ**. Deployed on a self-hosted **VPS** using **Dokploy** with **Docker** containerization and **Nginx** reverse proxy.
 
 ---
 
