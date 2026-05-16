@@ -475,7 +475,6 @@ export const assistantWelcome = TryCatch(async (req: Request, res: Response) => 
         return;
     }
 
-    // Check if chat already exists
     let chat = await Chat.findOne({
         users: { $all: [userId, assistantId], $size: 2 },
     });
@@ -486,21 +485,20 @@ export const assistantWelcome = TryCatch(async (req: Request, res: Response) => 
         });
     }
 
-    // Check if welcome message already sent
     const existingWelcome = await Message.findOne({
         chatId: chat._id,
         sender: assistantId,
     });
 
     if (!existingWelcome) {
-const welcomeMessages = [
-    "Welcome to Alapon! Start chatting with anyone instantly.",
-    "Search for users and begin a conversation. Send text, images, or files.",
-    "You can edit, delete, and react to messages. You will also see when your messages are read.",
-    "Go to Settings to update your profile, change your name, or go invisible.",
-];
+        const welcomeMessages = [
+            "Welcome to Alapon! Start chatting with anyone instantly.",
+            "Search for users and begin a conversation. Send text, images, or files.",
+            "You can edit, delete, and react to messages. You will also see when your messages are read.",
+            "Go to Settings to update your profile, change your name, or go invisible.",
+        ];
 
-        let lastMessage = null;
+        let lastMessage: any = null;
 
         for (let i = 0; i < welcomeMessages.length; i++) {
             const message = await Message.create({
@@ -513,24 +511,21 @@ const welcomeMessages = [
 
             lastMessage = message;
 
-            // Small delay between messages for realistic feel
             if (i < welcomeMessages.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 500));
+                await new Promise(resolve => setTimeout(resolve, 300));
             }
         }
 
-        // Update chat's latest message with the last one
         if (lastMessage) {
             await Chat.findByIdAndUpdate(chat._id, {
                 latestMessage: {
-                    text: lastMessage.text,
+                    text: String(lastMessage.text),
                     sender: assistantId,
                 },
                 updatedAt: new Date(),
             });
         }
 
-        // Emit socket events for each message
         const receiverSocketId = userSocketMap[userId.toString()];
         if (receiverSocketId) {
             const allMessages = await Message.find({
