@@ -7,9 +7,6 @@ import { generateToken } from "../config/generateToken.js";
 import type { AuthenticatedRequest } from "../middleware/isAuth.js";
 import token from "jsonwebtoken";
 import cloudinary from "../config/cloudinary.js";
-import { assistantUserId } from "../index.js";
-
-const chatServiceBase = process.env.CHAT_SERVICE || 'http://chat:5002';
 
 // OTP Generation 
 export const loginUser = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -26,12 +23,15 @@ export const loginUser = TryCatch(async (req: Request, res: Response, next: Next
     return;
   }
 
+
   const otp = Math.floor(100000 + Math.random() * 900000).toString()
+
   const otpKey = `otp:${email}`
 
   await redisClient.set(otpKey, otp,{
     EX: 300,
   });
+
 
   await redisClient.set(rateLimitKey, "true", {
     EX: 60,
@@ -44,11 +44,13 @@ export const loginUser = TryCatch(async (req: Request, res: Response, next: Next
   };
 
   await publishToQueue("send-otp", message)
+
   res.status(200).json({
     success: true,
     message: "OTP sent successfully"
   });
 });
+
 
 //OTP Verification 
 export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFunction)=>
@@ -64,6 +66,7 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
   }
 
   const otpKey = `otp:${email}`
+
   const storedOtp = await redisClient.get(otpKey);
 
   if(!storedOtp || storedOtp != enteredOtp)
@@ -72,13 +75,13 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
       success: false,
       message: "Invalid or expired OTP",
     });
+
     return;
   }
 
   await redisClient.del(otpKey);
 
   let user = await User.findOne({email})
-  let isNewUser = false;
 
   if(!user)
   {
@@ -87,7 +90,6 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
       name,
       email
     });
-    isNewUser = true;
   }
 
   const token = generateToken(user);
@@ -98,47 +100,40 @@ export const verifyUser = TryCatch(async(req:Request, res:Response, next:NextFun
     success:true
   });
 
-  // Send welcome message from Alapon Assistant (fire-and-forget)
-  if (isNewUser && assistantUserId) {
-    try {
-      await fetch(`${chatServiceBase}/api/v1/internal/assistant-welcome`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user._id.toString(),
-          assistantId: assistantUserId,
-        }),
-      });
-    } catch (error) {
-      console.error("Failed to send assistant welcome:", error);
-    }
-  }
 });
+
+
 
 export const myProfile = TryCatch(async(req:AuthenticatedRequest, res:Response)=>
 {
   const user = req.user;
+
   res.json(user);
 });
 
 export const getAllUsers = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
+
     const users = await User.find();
+
     res.json(users);
 });
 
 export const getAUser = TryCatch(async(req: Request, res: Response) => {
     const user = await User.findById(req.params.id);
+
     res.json({ user });
 });
 
 export const updateProfile = TryCatch(async(req: AuthenticatedRequest, res: Response) => {
   const user = await User.findById(req.user?._id);
+
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
   }
 
   if (req.body.name) user.name = req.body.name;
+
   if (req.body.isInvisible !== undefined) user.isInvisible = req.body.isInvisible === "true" || req.body.isInvisible === true;
 
   if (req.file) {
@@ -147,7 +142,9 @@ export const updateProfile = TryCatch(async(req: AuthenticatedRequest, res: Resp
   }
 
   await user.save();
+
   const updatedToken = generateToken(user);
+
   res.json({ message: "Profile updated successfully", token: updatedToken, user });
 });
 

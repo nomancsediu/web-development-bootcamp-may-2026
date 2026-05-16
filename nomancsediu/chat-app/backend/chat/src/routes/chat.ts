@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNewChat, getAllChats, getMessagesByChat, sendMessage, deleteMessage, editMessage, reactToMessage, deleteChat, assistantWelcome } from '../controllers/chat.js';
+import { createNewChat, getAllChats, getMessagesByChat, sendMessage, deleteMessage, editMessage, reactToMessage, deleteChat } from '../controllers/chat.js';
 import { isAuth } from '../middleware/isAuth.js';
 import { upload } from '../middleware/multer.js';
 
@@ -13,8 +13,5 @@ router.delete("/message/:messageId", isAuth, deleteMessage);
 router.patch("/message/:messageId", isAuth, editMessage);
 router.patch("/message/:messageId/react", isAuth, reactToMessage);
 router.delete("/chat/:chatId", isAuth, deleteChat);
-
-// Internal route - no auth (service-to-service)
-router.post('/internal/assistant-welcome', assistantWelcome);
 
 export default router;

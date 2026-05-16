@@ -5,7 +5,6 @@ import {createClient} from 'redis';
 import userRoutes from "./routes/user.js";
 import { connectRabbitMQ } from './config/rabitmq.js';
 import cors from 'cors';
-import { User } from './model/User.js';
 
 dotenv.config();
 
@@ -17,28 +16,6 @@ export const redisClient = createClient({
 });
 
 redisClient.connect().then(() => console.log("Redis connected")).catch(console.error);
-
-// Alapon Assistant Bot
-export let assistantUserId: string = "";
-
-const createAssistantIfNotExists = async () => {
-    try {
-        let assistant = await User.findOne({ email: "assistant@alapon.bot" });
-        if (!assistant) {
-            assistant = await User.create({
-                name: "Alapon Assistant",
-                email: "assistant@alapon.bot",
-                isBot: true,
-            });
-            console.log("Alapon Assistant bot created:", assistant._id);
-        } else {
-            console.log("Alapon Assistant bot already exists:", assistant._id);
-        }
-        assistantUserId = assistant._id.toString();
-    } catch (error) {
-        console.error("Error creating Alapon Assistant bot:", error);
-    }
-};
 
 const app = express();
 
@@ -66,7 +43,7 @@ const corsOptions = {
         'Access-Control-Request-Headers'
     ],
     exposedHeaders: ['Content-Length', 'X-Request-Id'],
-    maxAge: 86400,
+    maxAge: 86400, // 24 hours
     preflightContinue: false,
     optionsSuccessStatus: 204
 };
@@ -83,7 +60,6 @@ app.get('/health', (req, res) => {
 
 const port = process.env.PORT;
 
-app.listen(port, async () => {
+app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);
-    await createAssistantIfNotExists();
 });

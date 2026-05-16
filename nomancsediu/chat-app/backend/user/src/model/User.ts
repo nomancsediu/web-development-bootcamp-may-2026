@@ -8,7 +8,6 @@ export interface IUser extends Document{
         publicId: string;
     };
     isInvisible: boolean;
-    isBot: boolean;
 }
 
 const schema: Schema<IUser> = new Schema({
@@ -26,10 +25,6 @@ const schema: Schema<IUser> = new Schema({
         publicId: { type: String, default: "" },
     },
     isInvisible: {
-        type: Boolean,
-        default: false,
-    },
-    isBot: {
         type: Boolean,
         default: false,
     },
