@@ -343,7 +343,7 @@ const ChatApp = () => {
   }
 
   return (
-    <div className='h-screen flex bg-slate-950 text-white overflow-hidden'>
+    <div className='h-dvh flex bg-slate-950 text-white overflow-hidden'>
       {/* Mobile + Tablet: sidebar shown when no user selected */}
       <div className={`lg:hidden fixed inset-0 z-20 bg-slate-900 transition-transform duration-300 ${selectedUser ? '-translate-x-full' : 'translate-x-0'}`}>
         <ChatSidebar
@@ -380,7 +380,7 @@ const ChatApp = () => {
         />
       </div>
 
-      <div className={`lg:ml-80 flex-1 flex flex-col h-screen overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`lg:ml-80 flex-1 flex flex-col h-dvh overflow-hidden bg-slate-950 ${!selectedUser ? 'hidden lg:flex' : 'flex'}`}>
         {selectedUser ? (
           <>
             <ChatHeader selectedUser={selectedUser} user={user} setSidebarOpen={setSidebarOpen} isTyping={isTyping} onlineUsers={onlineUsers} onBack={() => setSelectedUser(null)} onDeleteChat={handleDeleteChat} />
